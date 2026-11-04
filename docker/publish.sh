@@ -1,6 +1,7 @@
 #!/bin/sh
 # Build the Strata images of one release from its engine packages and, only with --push, push them to the registry.
-# The GitHub Actions workflow (.github/workflows/docker-images.yml) runs this script once per flavor; you can run it by hand too.
+# The GitHub Actions workflow (.github/workflows/docker-images.yml) runs this script once per flavor; .github/workflows/release.yml runs it
+# once with the AMD flavors of a release; you can run it by hand too.
 #
 #   docker/publish.sh --release-tag v0.2.7                        # builds every flavor the release has a package for; pushes nothing
 #   docker/publish.sh --release-tag v0.2.7 --flavors cuda13,cuda12 --push
