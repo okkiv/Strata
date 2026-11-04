@@ -320,6 +320,10 @@ files the signed update feed names. Nothing publishes by itself: a maintainer st
    for), **push** and **latest**. Run it once with **push off**: it builds every image and publishes nothing (a dry run).
 3. Run it again with **push on**. It logs in to `ghcr.io` with the job's `GITHUB_TOKEN` (`packages: write`) and pushes
    `ghcr.io/niko1221/strata:0.2.7-<flavor>` and `latest-<flavor>`. Turn **latest** off for a pre-release.
+
+A feed that is **not published as a release** (a pre-release you built and signed on your own computer) goes in through **source**: give
+the URL of the folder with `strata-feed.json`, its `.sig` and the archives, plus the **version** to write on the image (for example
+`0.2.11-test`), and leave the release tag empty. The same checks run; nothing needs a GitHub release.
 4. The first push creates each package as private. In the repository's Packages, open every package, **Package settings, Change
    visibility, Public**, and check it is linked to the repository (the image carries the `org.opencontainers.image.source` label).
 5. Check one pull from a computer that is not logged in: `docker pull ghcr.io/niko1221/strata:0.2.7-cuda13`.
@@ -341,6 +345,8 @@ the job starts the image once to see that the Terminal inside it runs.
 
 A flavor the feed has no package for is left out, with a line in the log. The same steps run from a Linux computer with Docker:
 `docker/publish.sh --release-tag v0.2.7` builds everything and pushes nothing; add `--push` (after `docker login ghcr.io`) to publish.
+An unpublished feed runs the same way: `docker/publish.sh --source DIR --version 0.2.7-test` (`DIR` holds `strata-feed.json`, its `.sig`
+and the archives).
 The images run on the runner without a graphics card, so the card checks (`docker/smoke-test.sh`) stay a manual step on a computer with the card.
 
 ## Known limits

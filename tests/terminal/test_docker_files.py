@@ -272,12 +272,18 @@ class Publishing(unittest.TestCase):
         self.assertEqual(set(triggers), {"workflow_dispatch"})
         inputs = triggers["workflow_dispatch"]["inputs"]
         self.assertIn("release_tag", inputs)
+        self.assertFalse(inputs["release_tag"]["required"])   # a run can come from a source feed instead
+        for name in ("source", "version", "source_ref"):
+            self.assertIn(name, inputs)
         self.assertFalse(inputs["push"]["default"])
         self.assertEqual(data["permissions"], {"contents": "read"})
         self.assertEqual(data["jobs"]["image"]["permissions"], {"contents": "read", "packages": "write"})
         text = self.WORKFLOW.read_text(encoding="utf-8")
-        self.assertIn("ghcr.io/niko1221/strata", text)
+        self.assertIn("ghcr.io/okkiv/strata", text)
         self.assertIn("docker/publish.sh", text)
+        # both sources reach the two scripts, and the image version is carried between the jobs
+        self.assertIn('--source $SRC', text)
+        self.assertIn('$FROM --version "$VERSION"', text)
         self.assertNotIn("${{ secrets.GITHUB_TOKEN }}\" |", text)   # the token goes through an env variable, not into the command line
 
 
