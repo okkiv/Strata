@@ -43,7 +43,9 @@ Strix Point (890M / 880M, gfx1150) and Krackan (860M / 840M, gfx1152) are named 
 (gfx1012) builds by hand: [OLDER_GPUS.md](OLDER_GPUS.md#amd-building-gfx906-and-gfx1012).
 
 DeepSeek V4.1-Flash runs on the Radeon AI PRO R9700 on Linux, in the app and in the Terminal. The RX 9070 (gfx1200) engine package
-carries it but it is untested. Details: [MODELS.md](MODELS.md#deepseek-v41-flash).
+carries it but it is untested. The RX 7000 series (gfx1100 / gfx1101 / gfx1102) gets it in the Linux `rx7900` package since 0.2.10: built
+for those cards, never run on one, so Strata says so before it starts and asks for a report. Details:
+[MODELS.md](MODELS.md#deepseek-v41-flash).
 
 <a id="ready-made-packages-023"></a>
 ## Ready-made packages

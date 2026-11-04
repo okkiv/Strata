@@ -56,10 +56,17 @@ class Rule(unittest.TestCase):
         self.assertEqual(ids(dsv41_fit.run_cards([apu(0)], "amd", windows=False)[0]), [0])
 
     def test_a_card_the_engine_package_has_no_code_for_is_left_out_and_said(self):
-        keep, left = dsv41_fit.run_cards([amd(0, "gfx1201"), amd(1, "gfx1100", 24.0)], "amd", windows=False)
+        keep, left = dsv41_fit.run_cards([amd(0, "gfx1201"), amd(1, "gfx1030", 24.0)], "amd", windows=False)
         self.assertEqual(ids(keep), [0])
-        self.assertIn("gfx1100", left[0]["why_ignored"])
-        self.assertIn("gfx1200, gfx1201", left[0]["why_ignored"])
+        self.assertIn("gfx1030", left[0]["why_ignored"])
+        self.assertIn("gfx1200, gfx1201, gfx1100", left[0]["why_ignored"])
+
+    def test_an_rx_7000_card_runs_and_is_not_called_rdna4(self):
+        rx7700 = [amd(0, "gfx1101", 12.0)]
+        keep, left = dsv41_fit.run_cards(rx7700, "amd", windows=False)
+        self.assertEqual(ids(keep), [0])                             # the Linux rx7900 package holds gfx1101 code
+        self.assertEqual(left, [])
+        self.assertFalse(dsv41_fit.rdna4_faster(rx7700, "ISTA-DAS-Coder", "amd"))   # the Faster-mode rule is an RDNA4 measurement
 
     def test_the_installed_package_decides_what_it_covers(self):
         keep, _ = dsv41_fit.run_cards([amd(0, "gfx1201"), amd(1, "gfx1100", 24.0)], "amd", windows=False, covered=("gfx1100", "gfx1201"))
@@ -110,7 +117,7 @@ class Rule(unittest.TestCase):
 
     def test_the_plan_and_the_options_say_what_the_run_does(self):
         cases = {"four": (FOUR, False, [0, 1, 2, 3]), "apu": ([apu(0), amd(1)], False, [1]),
-                 "mixed": ([amd(0), amd(1, "gfx1100", 24.0)], False, [0]), "windows": ([amd(0), amd(1)], True, [0])}
+                 "mixed": ([amd(0), amd(1, "gfx1030", 24.0)], False, [0]), "windows": ([amd(0), amd(1)], True, [0])}
         for name, (cards, windows, want) in cases.items():
             with mock.patch.object(dsv41_fit, "_on_windows", lambda w=windows: w):
                 plan = dsv41_fit.plan(cards, 251.0, None, vendor="amd", model="IST-DAS-2.25bpw")
@@ -224,7 +231,7 @@ class Install(unittest.TestCase):
 
     def test_two_mixed_cards_pin_the_one_the_package_runs_even_when_setup_picked_the_other(self):
         covered = amd(0, "gfx1201", 16.0)
-        self.go([covered], [covered], pick=1)                            # setup's own pick (more memory) was the gfx1100 card
+        self.go([covered], [covered], pick=1)                            # setup's own pick (more memory) was the gfx1030 card
         self.assertEqual(self.cfg["gpu"], 0)
         self.assertEqual(self.cfg["gpus_by"], "setup")
         self.assertEqual(server.child_env({**self.cfg})["HIP_VISIBLE_DEVICES"], "0")
@@ -300,7 +307,7 @@ class Widen(unittest.TestCase):
         self.assertEqual(saved["gpu"], 0)
 
     def test_mixed_architectures_widen_only_to_the_cards_the_package_runs(self):
-        _, saved = self.widen({"gpu": 0, "gpus_asked": True}, [amd(0), amd(1, "gfx1100", 24.0), amd(2)])
+        _, saved = self.widen({"gpu": 0, "gpus_asked": True}, [amd(0), amd(1, "gfx1030", 24.0), amd(2)])
         self.assertEqual(saved["gpu"], [0, 2])
 
 
@@ -410,7 +417,7 @@ class LauncherCards(unittest.TestCase):
         self.assertIsNone(self.cards([apu(0), amd(1)], self.base(gpus_by="setup", gpu=1, gpus_asked=True)))
 
     def test_mixed_cards_run_on_the_ones_the_package_has_code_for(self):
-        self.assertEqual(self.cards([amd(0), amd(1, "gfx1100", 24.0)], self.base(gpus_by="setup", gpu=0, gpus_asked=True)), [0])
+        self.assertEqual(self.cards([amd(0), amd(1, "gfx1030", 24.0)], self.base(gpus_by="setup", gpu=0, gpus_asked=True)), [0])
 
 
 class Launcher(unittest.TestCase):

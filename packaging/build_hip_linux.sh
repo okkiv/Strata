@@ -1,5 +1,5 @@
 #!/bin/bash
-# Linux AMD (HIP) engine package: strata (+ strata-dsv41 for rx9070) + the CPU picture reader (strata-vision) + the GPU picture reader (strata-vision-hip),
+# Linux AMD (HIP) engine package: strata (+ strata-dsv41 for rx9070 and rx7900) + the CPU picture reader (strata-vision) + the GPU picture reader (strata-vision-hip),
 # the ROCm libraries both load, and the rocBLAS / hipBLASLt kernel data for the listed archs, packaged as an engine component.
 # Run on a Linux box that has ROCm (TheRock Python wheels are enough); the tester packages were built in an Ubuntu 22.04 chroot
 # (glibc 2.35) so they run on every distribution since.  All settings are environment variables:
@@ -12,7 +12,8 @@
 #   OUT=<work folder>  PKGVER=0.1.56  COMMIT=<source commit for the build id>  JOBS=16
 #   VISION_ONLY=1                    build only the two readers (no engine, no package)
 #   DSV41=1|0                        also build strata-dsv41 (the DeepSeek-V4.1 engine, tools/dsv41/build_hip_linux.sh's flags) and ship it beside
-#                                    strata: default 1 for the rx9070 variant (gfx1200 gfx1201; built and run on an R9700), 0 for the others
+#                                    strata: default 1 for the rx9070 variant (gfx1200 gfx1201; built and run on an R9700) and for rx7900 (gfx1100
+#                                    gfx1101 gfx1102; built, not run on a real RX 7000 card), 0 for the others
 #   SPLIT_DIR=<folder>               ship the strata-split-N-amd binaries of that folder (made by packaging/build_split_hip.sh) beside strata
 #   NO_PACKAGE=1                     stop after the stage folder
 #   VISION_HIP_DEFS="-DGGML_CUDA_FA=OFF"   extra cmake definitions for the GPU reader only
@@ -38,8 +39,8 @@ case "$V" in
   igpu)   ARCHS=${ARCHS:-gfx1103;gfx1150} ;;
   *)      ARCHS=${ARCHS:?ARCHS=gfx...} ;;
 esac
-NOTE_EXTRA=""; [ "$V" = rx6000 ] && NOTE_EXTRA=" (built, not tested on a real RX 6000 card)"
-if [ -z "${DSV41:-}" ]; then DSV41=0; [ "$V" = rx9070 ] && DSV41=1; fi
+NOTE_EXTRA=""; [ "$V" = rx6000 ] && NOTE_EXTRA=" (built, not tested on a real RX 6000 card)"; [ "$V" = rx7900 ] && NOTE_EXTRA=" (built, not tested on a real RX 7000 card)"
+if [ -z "${DSV41:-}" ]; then DSV41=0; case "$V" in rx9070|rx7900) DSV41=1 ;; esac; fi
 ARCHLIST=${ARCHS//;/ }
 DATAARCH=${ARCHS//;/,}
 mkdir -p "$OUT"; S=$OUT/build.status

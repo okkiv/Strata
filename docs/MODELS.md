@@ -71,6 +71,7 @@ you have the disk. Perplexity is measured on a fixed set of 4,995 test texts; lo
 | --- | --- |
 | NVIDIA RTX 30, 40 and 50 series, 12 GB or more | Windows, Linux |
 | AMD Radeon AI PRO R9700 | Linux |
+| AMD Radeon RX 7000 series (gfx1100 / gfx1101 / gfx1102) | Linux |
 | AMD Ryzen AI Max (Strix Halo, gfx1151, 128 GB unified; 64 GB or more shared with Windows) | Windows |
 | Apple Silicon Mac, 64 GB or more, macOS 15 or newer (text only, [DEEPSEEK_MAC.md](DEEPSEEK_MAC.md)) | macOS |
 
@@ -78,7 +79,8 @@ Tested on an RTX 3060 (Linux), an RTX 5070 (Windows), four R9700 cards (Linux) a
 14 to 16 tokens a second on code with the default Faster mode, 10 to 11 on chat, 78 tokens a second on a 4K prompt and 109 on
 8K). The RTX 30 kernels were also checked on an RTX A4000. Windows on RTX 30 and the RX 9070 are built but were not run. On a
 Mac it was run on an M5 Max with 128 GB ([DEEPSEEK_MAC.md](DEEPSEEK_MAC.md)). Strix Halo on Linux does not run it yet; on Strix Halo Windows the graphics memory is the RAM, so most of the experts are
-read from the SSD and an NVMe drive matters.
+read from the SSD and an NVMe drive matters. The RX 7000 series is built for those cards (the Linux `rx7900` package carries the DeepSeek
+engine since 0.2.10) and has never been run on one, so Strata says so before it starts.
 
 RTX 40 cards are covered by the engine packages since 0.2.7 (sm_89 code); we have not run one ourselves, see [DEEPSEEK41.md](DEEPSEEK41.md#the-engine-package) for a user's measurement.
 

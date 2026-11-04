@@ -122,7 +122,8 @@ settings? Answers in progress stop." With `--no-tui` the command refuses with on
 
 ## DeepSeek V4.1-Flash
 
-DeepSeek V4.1-Flash runs in the Terminal and in the app, on NVIDIA RTX 30, 40 and 50 (Windows and Linux) and on the Radeon AI PRO R9700 (Linux). Hardware, sizes and speeds are in [MODELS.md](MODELS.md#deepseek-v41-flash).
+DeepSeek V4.1-Flash runs in the Terminal and in the app, on NVIDIA RTX 30, 40 and 50 (Windows and Linux), on the Radeon AI PRO R9700 (Linux) and on
+the Radeon RX 7000 series (Linux: built for those cards, never run on one, so the plan says so). Hardware, sizes and speeds are in [MODELS.md](MODELS.md#deepseek-v41-flash).
 
 ```sh
 strata launch --plan --family deepseek41 --model ist-das-2.00bpw
