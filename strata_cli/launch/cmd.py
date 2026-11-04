@@ -529,7 +529,7 @@ def gpu_notices(s: S.LaunchSettings, comp) -> list[S.Notice]:
     if new_card:
         out.append(S.Notice("warn", new_card[0], new_card[1]))
     if s.family == "deepseek41" and comp.rx7000_card:
-        out.append(S.Notice("warn", DEEPSEEK_RX7000_NOTE, "If something fails, tell us at https://github.com/Niko1221/Strata/issues (attach the engine log)."))
+        out.append(S.Notice("warn", DEEPSEEK_RX7000_NOTE, "If something fails, tell us at https://github.com/okkiv/Strata/issues (attach the engine log)."))
     return out
 
 

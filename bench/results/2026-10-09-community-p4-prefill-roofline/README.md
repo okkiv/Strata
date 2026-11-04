@@ -1,6 +1,6 @@
 # Tesla P4 prefill: transfer reuse and chunk sizing
 
-Independent measurements on 2026-10-09, motivated by [#1670](https://github.com/Niko1221/Strata/issues/1670) from @vizdatom. This is a results-only submission. The author's layer-major implementation was not used; no layer-major implementation is included here.
+Independent measurements on 2026-10-09, motivated by [#1670](https://github.com/okkiv/Strata/issues/1670) from @vizdatom. This is a results-only submission. The author's layer-major implementation was not used; no layer-major implementation is included here.
 
 One Tesla P4, Qwen3.8-Flash-Next-GSQ-RCO IQ3_XXS, int8 KV, CUDA 12.0, GCC 12, driver 580.178.04, Ubuntu 24.04/kernel 7.0.0-31, dual Xeon E5-2697 v3, 251.773 GiB RAM. GPU 0 has an x16 link; the other two P4s were idle. Storage traffic was zero in measured runs with a warm page cache. Power limit and under-load link generation were not recorded.
 

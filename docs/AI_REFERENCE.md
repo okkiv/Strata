@@ -19,7 +19,7 @@ holds the technical context behind the short [README](../README.md). Use [AI_SET
   See [LICENSE](../LICENSE) and [component/model licensing](HOW_IT_WORKS.md#license).
 - Local inference does not mean every feature is offline. Downloads, updates, remote tools and user-enabled
   network access have separate behavior. Use [SAFETY.md](SAFETY.md) for privacy and network claims.
-- Verify the current app and engine versions in the [release notes](https://github.com/Niko1221/Strata/releases).
+- Verify the current app and engine versions in the [release notes](https://github.com/okkiv/Strata/releases).
   A screenshot, translated README or historical benchmark is not a version source.
 
 ## Model families

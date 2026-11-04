@@ -6,7 +6,7 @@
 // report themselves unsupported, so native_expert.cpp takes ggml-cpu's vec_dot, which has NEON paths.  The
 // canonical Q2_0 pack (its own blob layout) is refused: those kernels are AVX-512 only.  A native pack's Q2_0
 // rows are not routed here: q2_native_kernels() is false when cpu_avx2_ok() is, so they use ggml-cpu too.
-// Local port of the approach in https://github.com/Niko1221/Strata/pull/1077 onto main e8ca9af.
+// Local port of the approach in https://github.com/okkiv/Strata/pull/1077 onto main e8ca9af.
 #include "strata/kernels/cpu/expert.hpp"
 #include "strata/kernels/cpu/iq_avx2.hpp"
 #include "strata/kernels/cpu/iq_avx512.hpp"

@@ -4,7 +4,7 @@ Strata runs on Intel Arc cards on Linux through its own engine ported to SYCL (I
 an Arc A-series (Alchemist) or B-series (Battlemage) card. It covers the released Terminal route, what you need, how to
 build the engine from source, and which cards were tested. The port's workflow and measurements are in [INTEL.md](INTEL.md).
 
-maxfridbe wrote the port in [#423](https://github.com/Niko1221/Strata/pull/423). The code is in `sycl/`. Intel Arc is an
+maxfridbe wrote the port in [#423](https://github.com/okkiv/Strata/pull/423). The code is in `sycl/`. Intel Arc is an
 official platform since 0.1.40.2. The maintainers test on an Arc Pro B70 (32 GB, `xe` driver) and an Arc A750 (8 GB, `i915`
 driver); results from other cards are community reports. The Mac and Windows builds have no Intel engine.
 

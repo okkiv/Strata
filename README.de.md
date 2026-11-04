@@ -15,8 +15,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Niko1221/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/Niko1221/Strata?label=download&color=0ab887" alt="Strata herunterladen"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Niko1221/Strata" alt="MIT-Lizenz"></a>
+  <a href="https://github.com/okkiv/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/okkiv/Strata?label=download&color=0ab887" alt="Strata herunterladen"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/okkiv/Strata" alt="MIT-Lizenz"></a>
   <a href="https://buymeacoffee.com/strataengine"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?logo=buymeacoffee&logoColor=000" alt="Strata auf Buy Me a Coffee unterstützen"></a>
 </p>
 
@@ -77,7 +77,7 @@ Gemessen mit dem 2.00-bpw-Set auf Strata 0.2.5. „Ausgabe“ ist das Tempo der 
 | 1x Radeon AI PRO R9700, 251 GB RAM | 21 bis 25 Token/s | 320 bis 360 Token/s (8K) |
 | 4x Radeon AI PRO R9700 | 74 bis 77 Token/s | 400 bis 450 Token/s (8K) |
 
-[Speicher, Festplatte und Details](docs/DEEPSEEK41.md) · [Versionshinweise](https://github.com/Niko1221/Strata/releases)
+[Speicher, Festplatte und Details](docs/DEEPSEEK41.md) · [Versionshinweise](https://github.com/okkiv/Strata/releases)
 
 </details>
 
@@ -91,7 +91,7 @@ Unsicher, was passt? [Wähle ein Modell für deinen Computer](docs/MODELS.md#pic
 
 ### Desktop-App
 
-**[Strata für Windows, Linux oder Mac herunterladen →](https://github.com/Niko1221/Strata/releases/latest)**
+**[Strata für Windows, Linux oder Mac herunterladen →](https://github.com/okkiv/Strata/releases/latest)**
 
 Installiere die App, wähle ein Modell und leg mit dem Chat los. Es gibt einen Installer pro System. Beim ersten Start lädt die App die Engine für deine Grafikkarte herunter. [Hilfe zum Installer](docs/INSTALL.md#the-app).
 
@@ -114,13 +114,13 @@ Lieber im Terminal? Installiere Strata und starte dann **`strata launch`**.
 **Linux / Mac**
 
 ```sh
-curl -fsSL https://github.com/Niko1221/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
+curl -fsSL https://github.com/okkiv/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
 ```
 
 **Windows PowerShell**
 
 ```powershell
-irm https://github.com/Niko1221/Strata/releases/latest/download/install.ps1 | iex
+irm https://github.com/okkiv/Strata/releases/latest/download/install.ps1 | iex
 ```
 
 Öffne unter Windows danach ein neues Terminal. Dann:
@@ -170,7 +170,7 @@ Führe **`strata connect`** aus, um die Einrichtung für dein Tool zu sehen. [Ve
 
 ## Hilfe
 
-[Alle Anleitungen](docs) · [Fehlerbehebung](docs/TROUBLESHOOTING.md) · [Fehler melden](https://github.com/Niko1221/Strata/issues/new/choose) ·
+[Alle Anleitungen](docs) · [Fehlerbehebung](docs/TROUBLESHOOTING.md) · [Fehler melden](https://github.com/okkiv/Strata/issues/new/choose) ·
 [Benchmarks](docs/COMMUNITY_BENCHMARKS.md) · [So funktioniert es](docs/HOW_IT_WORKS.md) · [Mitmachen](CONTRIBUTING.md)
 
 ## Strata unterstützen

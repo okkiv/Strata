@@ -20,7 +20,7 @@ Suggested opening: **“Run powerful AI on your own computer. Chat, code and wor
    Gyro is a memory-saving option, currently slower. State the model, quantization and hardware used in any live demo.
 5. **Connect a familiar tool.** Examples include Claude Code, Codex CLI, OpenCode, oh-my-pi, pi.dev and Hermes Agent.
    Show a real successful connection if demonstrating one.
-6. **Close with the two useful links.** [Download Strata](https://github.com/Niko1221/Strata/releases/latest)
+6. **Close with the two useful links.** [Download Strata](https://github.com/okkiv/Strata/releases/latest)
    and [support development](https://buymeacoffee.com/strataengine).
 
 This is an outline, not evidence that any particular model, workflow or benchmark was tested for the video.
@@ -37,7 +37,7 @@ establish a current default model or universal performance.
 | Desktop app | [app-chat.png](media/app-chat.png) | Chat, files and a live preview in one window. The capture shows a Gyro model; do not relabel it as an ISTA or DeepSeek run. |
 | Terminal app | [terminal-monitor.png](media/terminal-monitor.png) | Model activity and hardware use. The capture shows a Gyro-S session; its live counters are not a standardized benchmark. |
 | Coding demo thumbnail | [pagoda-preview.webp](media/pagoda-preview.webp) | A voxel garden generated locally. |
-| Coding demo video | [Pagoda.mp4](https://github.com/Niko1221/Strata/releases/download/v0.1.10/Pagoda.mp4) | Existing 49-second demo, documented with an RTX 5070, IQ3_S and 128K context. Keep it separate from the GUI and TUI screenshots. |
+| Coding demo video | [Pagoda.mp4](https://github.com/okkiv/Strata/releases/download/v0.1.10/Pagoda.mp4) | Existing 49-second demo, documented with an RTX 5070, IQ3_S and 128K context. Keep it separate from the GUI and TUI screenshots. |
 | Engine explanation | [how-it-works.svg](media/how-it-works.svg), [guess-and-check.svg](media/guess-and-check.svg) | Illustrations of the documented Flash-Next engine path, not proof that every model uses the same path. |
 
 ## Accuracy rules
@@ -56,7 +56,7 @@ establish a current default model or universal performance.
 
 ## Links and contact
 
-- Project: [Niko1221/Strata](https://github.com/Niko1221/Strata)
-- Downloads: [Releases](https://github.com/Niko1221/Strata/releases/latest)
+- Project: [okkiv/Strata](https://github.com/okkiv/Strata)
+- Downloads: [Releases](https://github.com/okkiv/Strata/releases/latest)
 - Support: [Buy Me a Coffee](https://buymeacoffee.com/strataengine)
 - Sponsorships, hardware partnerships and collaborations: [niko.veit@outlook.com](mailto:niko.veit@outlook.com)

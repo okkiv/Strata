@@ -15,8 +15,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Niko1221/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/Niko1221/Strata?label=download&color=0ab887" alt="下载 Strata"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Niko1221/Strata" alt="MIT 许可证"></a>
+  <a href="https://github.com/okkiv/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/okkiv/Strata?label=download&color=0ab887" alt="下载 Strata"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/okkiv/Strata" alt="MIT 许可证"></a>
   <a href="https://buymeacoffee.com/strataengine"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?logo=buymeacoffee&logoColor=000" alt="在 Buy Me a Coffee 上支持 Strata"></a>
 </p>
 
@@ -77,7 +77,7 @@ strata launch --family deepseek41 --model ist-das-2.00bpw --plan
 | 1x Radeon AI PRO R9700, 251 GB 内存 | 21 到 25 tokens/s | 320 到 360 tokens/s (8K) |
 | 4x Radeon AI PRO R9700 | 74 到 77 tokens/s | 400 到 450 tokens/s (8K) |
 
-[内存、磁盘和详细信息](docs/DEEPSEEK41.md) · [发行说明](https://github.com/Niko1221/Strata/releases)
+[内存、磁盘和详细信息](docs/DEEPSEEK41.md) · [发行说明](https://github.com/okkiv/Strata/releases)
 
 </details>
 
@@ -91,7 +91,7 @@ strata launch --family deepseek41 --model ist-das-2.00bpw --plan
 
 ### 桌面应用
 
-**[下载适用于 Windows、Linux 或 Mac 的 Strata →](https://github.com/Niko1221/Strata/releases/latest)**
+**[下载适用于 Windows、Linux 或 Mac 的 Strata →](https://github.com/okkiv/Strata/releases/latest)**
 
 安装应用，选择模型，就可以开始聊天。每个系统只有一个安装程序。首次启动时，应用会下载适合你显卡的引擎。[安装程序帮助](docs/INSTALL.md#the-app)。
 
@@ -114,13 +114,13 @@ strata launch --family deepseek41 --model ist-das-2.00bpw --plan
 **Linux / Mac**
 
 ```sh
-curl -fsSL https://github.com/Niko1221/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
+curl -fsSL https://github.com/okkiv/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
 ```
 
 **Windows PowerShell**
 
 ```powershell
-irm https://github.com/Niko1221/Strata/releases/latest/download/install.ps1 | iex
+irm https://github.com/okkiv/Strata/releases/latest/download/install.ps1 | iex
 ```
 
 在 Windows 上，安装后请打开一个新的终端。然后运行：
@@ -170,7 +170,7 @@ strata launch
 
 ## 帮助
 
-[全部指南](docs) · [故障排查](docs/TROUBLESHOOTING.md) · [报告问题](https://github.com/Niko1221/Strata/issues/new/choose) ·
+[全部指南](docs) · [故障排查](docs/TROUBLESHOOTING.md) · [报告问题](https://github.com/okkiv/Strata/issues/new/choose) ·
 [基准测试](docs/COMMUNITY_BENCHMARKS.md) · [工作原理](docs/HOW_IT_WORKS.md) · [参与贡献](CONTRIBUTING.md)
 
 ## 支持 Strata

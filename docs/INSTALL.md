@@ -8,7 +8,7 @@ install does not need a source checkout or a startup `.bat` file.
 
 | I want | Do this |
 | --- | --- |
-| A window with chat | Download the installer from the [latest release](https://github.com/Niko1221/Strata/releases/latest) ([steps](#the-app)) |
+| A window with chat | Download the installer from the [latest release](https://github.com/okkiv/Strata/releases/latest) ([steps](#the-app)) |
 | The terminal, or my coding tool | Run the one-line install, then `strata launch` ([steps](#the-terminal)) |
 | DeepSeek V4.1-Flash | Pick it in the app, or run `strata launch --family deepseek41` ([model page](MODELS.md#deepseek-v41-flash)) |
 
@@ -36,7 +36,7 @@ hardware drivers. Models and updates need an internet connection to download.
 
 ## The app
 
-1. Open the [latest release](https://github.com/Niko1221/Strata/releases/latest).
+1. Open the [latest release](https://github.com/okkiv/Strata/releases/latest).
 2. Download the one installer for your system. There is one per system, not one per graphics card:
    - **Windows:** run `Strata-0.2.9-windows-x64-setup.exe`. It installs for your user and needs no administrator rights.
    - **Linux:** make `Strata-0.2.9-linux-x86_64.AppImage` executable, then open it. If FUSE is unavailable, run the
@@ -67,13 +67,13 @@ Install once, then use `strata launch`. The Terminal includes Python and downloa
 **Linux / Mac**
 
 ```sh
-curl -fsSL https://github.com/Niko1221/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
+curl -fsSL https://github.com/okkiv/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
 ```
 
 **Windows PowerShell**
 
 ```powershell
-irm https://github.com/Niko1221/Strata/releases/latest/download/install.ps1 | iex
+irm https://github.com/okkiv/Strata/releases/latest/download/install.ps1 | iex
 ```
 
 On Windows, open a **new terminal** afterwards. On Linux and Mac, if `strata` is not found, use the full path printed

@@ -1,7 +1,7 @@
 # Exact gfx1100 QSA scorer: measured prefill benefit, opt-in only
 
 Measured on 2026-10-11 on one RX 7900 XTX. This accompanies the HIP port of the
-four-lanes-per-query score kernel from [PR #1825](https://github.com/Niko1221/Strata/pull/1825)
+four-lanes-per-query score kernel from [PR #1825](https://github.com/okkiv/Strata/pull/1825)
 by xrip, pinned to `14bf32150490bb9f5fc4d9c7c5dcfdc96dd98797`. That PR's code excludes
 HIP; its algorithm and reduction order are the source of this port. This is an
 AMD extension, not a claim to invent that method.

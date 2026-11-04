@@ -57,7 +57,7 @@ original preparation versions. No custom draft vocabulary or ranking;
 ```sh
 export BENCH_ASSETS=/absolute/path/to/benchmark-assets
 export PREPARATION_ROOT=/absolute/path/to/strata-preparation-checkout
-git clone https://github.com/Niko1221/Strata.git "$PREPARATION_ROOT"
+git clone https://github.com/okkiv/Strata.git "$PREPARATION_ROOT"
 git -C "$PREPARATION_ROOT" fetch origin 6f32ec070f23ced9f50e704d854d775da52591ab
 git -C "$PREPARATION_ROOT" checkout --detach FETCH_HEAD
 python "$PREPARATION_ROOT/tools/iq_pack.py" \

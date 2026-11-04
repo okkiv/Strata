@@ -16,7 +16,7 @@ volume with ~22 GiB free at the time of writing.
 | --- | --- |
 | `/Users/nikoveit/Documents/deepseek-harness/ENDING PLAN` | The handoff packet (authoritative inputs). Manifest verified: `shasum -a 256 -c MANIFEST.sha256` → all OK. |
 | `…/deepseek-harness/strata-work/strata-rebuild` | **The integration checkout.** Branch `strata/rebuild-2026-10`. This is where implementation happens. |
-| `…/strata-work/Strata` | Pristine reference checkout of `Niko1221/Strata` at `main` (= reviewed pin `296b59d2`). Do not edit. |
+| `…/strata-work/Strata` | Pristine reference checkout of `okkiv/Strata` at `main` (= reviewed pin `296b59d2`). Do not edit. |
 | `…/strata-work/deepseek-harness` | Pristine clone of `deepseek-ai/deepseek-harness` at `57190202` (= reviewed pin). |
 | `…/strata-work/HyperCore-Tune` | Pristine clone at `4f9ab7fa` (= reviewed pin). |
 | `…/strata-work/handover/ui` | Extracted authoritative UI ZIP (14 Oct). |

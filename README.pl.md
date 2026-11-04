@@ -15,8 +15,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Niko1221/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/Niko1221/Strata?label=download&color=0ab887" alt="Pobierz Stratę"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/Niko1221/Strata" alt="Licencja MIT"></a>
+  <a href="https://github.com/okkiv/Strata/releases/latest"><img src="https://img.shields.io/github/v/release/okkiv/Strata?label=download&color=0ab887" alt="Pobierz Stratę"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/okkiv/Strata" alt="Licencja MIT"></a>
   <a href="https://buymeacoffee.com/strataengine"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?logo=buymeacoffee&logoColor=000" alt="Wesprzyj Stratę na Buy Me a Coffee"></a>
 </p>
 
@@ -80,7 +80,7 @@ Zmierzone na zestawie 2.00 bpw w Strata 0.2.5 (Strix Halo: 0.2.7). „Wyjście�
 | 4x Radeon AI PRO R9700 | 74–77 tokenów/s | 400–450 tokenów/s (8K) |
 | Ryzen AI Max+ 395 (Strix Halo), 128 GB pamięci współdzielonej | 19–21 tokenów/s (kod), 11 (czat) | 87 tokenów/s (4K), 125 tokenów/s (8K) |
 
-[Pamięć, dysk i szczegóły](docs/DEEPSEEK41.md) · [Informacje o wydaniach](https://github.com/Niko1221/Strata/releases)
+[Pamięć, dysk i szczegóły](docs/DEEPSEEK41.md) · [Informacje o wydaniach](https://github.com/okkiv/Strata/releases)
 
 </details>
 
@@ -94,7 +94,7 @@ Nie wiesz, co się zmieści? [Wybierz model do swojego komputera](docs/MODELS.md
 
 ### Aplikacja na komputer
 
-**[Pobierz Stratę dla Windows, Linuxa lub Maca →](https://github.com/Niko1221/Strata/releases/latest)**
+**[Pobierz Stratę dla Windows, Linuxa lub Maca →](https://github.com/okkiv/Strata/releases/latest)**
 
 Zainstaluj aplikację, wybierz model i zacznij rozmawiać. Dla każdego systemu jest jeden instalator. Przy pierwszym
 uruchomieniu aplikacja pobiera silnik dla twojej karty graficznej. [Pomoc z instalatorem](docs/INSTALL.md#the-app).
@@ -118,13 +118,13 @@ Wolisz terminal? Zainstaluj Stratę, a potem uruchom **`strata launch`**.
 **Linux / Mac**
 
 ```sh
-curl -fsSL https://github.com/Niko1221/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
+curl -fsSL https://github.com/okkiv/Strata/releases/latest/download/install.sh -o install.sh && sh install.sh
 ```
 
 **Windows PowerShell**
 
 ```powershell
-irm https://github.com/Niko1221/Strata/releases/latest/download/install.ps1 | iex
+irm https://github.com/okkiv/Strata/releases/latest/download/install.ps1 | iex
 ```
 
 W Windows otwórz potem nowe okno terminala. Następnie:
@@ -174,7 +174,7 @@ Uruchom **`strata connect`**, aby zobaczyć instrukcję konfiguracji dla swojego
 
 ## Pomoc
 
-[Wszystkie przewodniki](docs) · [Rozwiązywanie problemów](docs/TROUBLESHOOTING.md) · [Zgłoś błąd](https://github.com/Niko1221/Strata/issues/new/choose) ·
+[Wszystkie przewodniki](docs) · [Rozwiązywanie problemów](docs/TROUBLESHOOTING.md) · [Zgłoś błąd](https://github.com/okkiv/Strata/issues/new/choose) ·
 [Testy wydajności](docs/COMMUNITY_BENCHMARKS.md) · [Jak to działa](docs/HOW_IT_WORKS.md) · [Współtworzenie](CONTRIBUTING.md)
 
 ## Wesprzyj Stratę

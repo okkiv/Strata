@@ -30,7 +30,7 @@ Strata version.
   is tmpfs, used only for the write-overlap capture. No page-cache flush between
   runs; model-loading and I/O results are cache-state dependent.
 - OS: CachyOS Linux (rolling), kernel 7.2.9-2-cachyos; NVIDIA driver 615.78.08.
-- Source: [`fb58e0dbc8399662c0e47c76578c6e878b14f6cf`](https://github.com/Niko1221/Strata/commit/fb58e0dbc8399662c0e47c76578c6e878b14f6cf),
+- Source: [`fb58e0dbc8399662c0e47c76578c6e878b14f6cf`](https://github.com/okkiv/Strata/commit/fb58e0dbc8399662c0e47c76578c6e878b14f6cf),
   tag v0.1.41, engine 0.1.41. Local Release/CUDA **13.4.92**, native CPU build,
   CUDA architecture 120, GPU `strata-vision`. No local native source patch.
   Binary hashes and build metadata are in [provenance.json](provenance.json).
@@ -341,5 +341,5 @@ The bundled
 replay helper is an adaptation for this report; values in the per-run exports
 come from the original captured engine/client results. No engine or default
 change is proposed. Related existing discussion:
-[prefill chunk tradeoffs at 1M, #669](https://github.com/Niko1221/Strata/issues/669)
+[prefill chunk tradeoffs at 1M, #669](https://github.com/okkiv/Strata/issues/669)
 (different machine/model/version; no cross-report speedup comparison here).

@@ -71,7 +71,7 @@ test('DuckDuckGo refuses (HTTP 202): Bing answers, DuckDuckGo is left alone for 
   const w = world(call => (duck(call.url) ? page(ANOMALY, 202) : page(BING)));
   const first = await w.search.search({ query: 'node release notes', maxResults: 3 });
   assert.equal(first.sources.length, 3);
-  assert.equal(first.sources[0].url, 'https://github.com/Niko1221/Strata');
+  assert.equal(first.sources[0].url, 'https://github.com/okkiv/Strata');
   assert.equal(w.hostCalls('html.duckduckgo.com').length, 1);
   assert.equal(w.hostCalls('lite.duckduckgo.com').length, 0, 'a refusal is not followed by the lite page');
   assert.equal(w.hostCalls('bing.com').length, 1);
@@ -166,7 +166,7 @@ test('Bing: the real result page is read (redirect links decoded, snippets kept)
   const rows = parseBingResults(BING);
   assert.equal(rows.length, 5);
   assert.ok(rows.every(r => /^https:\/\//.test(r.url) && !r.url.includes('bing.com')), 'real addresses, not Bing redirects');
-  assert.equal(rows[1].url, 'https://github.com/Niko1221/Strata/releases');
+  assert.equal(rows[1].url, 'https://github.com/okkiv/Strata/releases');
   assert.ok(rows[0].snippet.length > 20);
   assert.equal(bingTarget('https://www.bing.com/ck/a?!&&p=1&u=a1aHR0cHM6Ly9leGFtcGxlLmNvbS9hP3g9MQ&ntb=1'), 'https://example.com/a?x=1');
   assert.equal(bingTarget('https://www.bing.com/images/search?q=x'), null);

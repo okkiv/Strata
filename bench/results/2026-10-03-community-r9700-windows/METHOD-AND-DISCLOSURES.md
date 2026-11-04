@@ -224,7 +224,7 @@ Of these, 56 are non-void requests.
   card here (we have none)".
 - **#382's state:** GitHub API `pulls/382` returns `state: closed, merged: false,
   merged_at: null` (closed 2026-10-03T01:18:10Z), but the maintainer's own comment on it
-  (Niko1221, 2026-10-03T01:18:09Z) says: "Released in 0.1.38: HIP builds run the drafter's
+  (okkiv, 2026-10-03T01:18:09Z) says: "Released in 0.1.38: HIP builds run the drafter's
   prompt pass per group. With #453 in the same release the batched path also covers the ring
   now, so this fallback is reached less often. Merged under your name (GitHub doesn't show it
   as merged because it went in by hand)." #579 reports a gfx1201 stall still present on 0.1.38

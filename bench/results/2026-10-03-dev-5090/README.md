@@ -1,6 +1,6 @@
 # IQ3_S single-GPU results, RTX 5090 / Ryzen 9 9950X3D
 
-Issue: [#165](https://github.com/Niko1221/Strata/issues/165)
+Issue: [#165](https://github.com/okkiv/Strata/issues/165)
 Engine: three passes on identical hardware and config —
 v0.1.34 (prebuilt), v0.1.38 (source build, sm_120), v0.1.38 with `STRATA_PF_FUSED=1`.
 Status: submission-shaped; fills the "IQ3_S single-GPU results remain outstanding" gap from the 3090/EPYC notes.

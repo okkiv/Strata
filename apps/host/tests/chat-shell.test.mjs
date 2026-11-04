@@ -56,8 +56,8 @@ test('API replies use their own context limit and never inherit local engine rea
 
 test('a web address from a reply opens in the default browser with an argument array, and only http(s) (#4721)',async()=>{
  const calls=[];const launch=async(...args)=>calls.push(args);
- await openArtifact({action:'open',url:'https://github.com/Niko1221/Strata/issues/3818?a=1&b=2'},{platform:'win32',launch});
- assert.deepEqual(calls[0],['rundll32.exe',['url.dll,FileProtocolHandler','https://github.com/Niko1221/Strata/issues/3818?a=1&b=2']]);
+ await openArtifact({action:'open',url:'https://github.com/okkiv/Strata/issues/3818?a=1&b=2'},{platform:'win32',launch});
+ assert.deepEqual(calls[0],['rundll32.exe',['url.dll,FileProtocolHandler','https://github.com/okkiv/Strata/issues/3818?a=1&b=2']]);
  await openArtifact({action:'open',url:'http://example.com/x'},{platform:'linux',launch});
  assert.deepEqual(calls[1],['xdg-open',['http://example.com/x']]);
  await openArtifact({action:'open',url:'http://example.com/x'},{platform:'darwin',launch});

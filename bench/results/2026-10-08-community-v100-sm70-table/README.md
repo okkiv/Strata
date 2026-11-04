@@ -16,7 +16,7 @@ The main limitation: one machine, one model, greedy decoding, and four back-to-b
 - **CPU:** AMD Threadripper 2990WX (32 cores, AVX2, **no AVX-512**); **RAM:** 96 GB;
   **storage:** NVMe SSD.
 - **OS:** Windows 11 (build 26200). **CUDA 12.6** (nvidia-smi reports CUDA 12.6 runtime). MSVC 19.44.
-- **Strata:** `Niko1221/Strata` at **`fb58e0d`** (v0.1.41), source build:
+- **Strata:** `okkiv/Strata` at **`fb58e0d`** (v0.1.41), source build:
 
   ```text
   cmake -S . -B build -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \

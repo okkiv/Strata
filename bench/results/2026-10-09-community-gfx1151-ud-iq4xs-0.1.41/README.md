@@ -1,6 +1,6 @@
 # Community benchmark: EVO-X2, Ryzen AI Max+ 395 / Radeon 8060S (gfx1151), 128 GB UMA
 
-Measured on 2026-10-09 by [libratechw](https://github.com/libratechw), using unmodified Strata v0.1.41 (`fb58e0dbc8399662c0e47c76578c6e878b14f6cf`) and Unsloth UD-IQ4_XS. This adds a same-day default/fast long-prompt comparison, two repetitions of the existing 69-task correctness suite, the official needle probe, and parallel-request checks relevant to [#1356](https://github.com/Niko1221/Strata/issues/1356).
+Measured on 2026-10-09 by [libratechw](https://github.com/libratechw), using unmodified Strata v0.1.41 (`fb58e0dbc8399662c0e47c76578c6e878b14f6cf`) and Unsloth UD-IQ4_XS. This adds a same-day default/fast long-prompt comparison, two repetitions of the existing 69-task correctness suite, the official needle probe, and parallel-request checks relevant to [#1356](https://github.com/okkiv/Strata/issues/1356).
 
 The default path scored **65/69 in both passes**, with identical generated content on all 69 tasks. At 128,000 prompt tokens, the fast configuration measured **1,108.6 prompt tok/s and 47.5 decode tok/s** (three-run medians), against 617.4 and 42.1 on the default configuration.
 

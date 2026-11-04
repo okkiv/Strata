@@ -366,7 +366,7 @@
    "tools": [
     "web_extract"
    ],
-   "input": "I need to check the DETAILS.md file to understand what llama.cpp actually supports for the qwen4exp architecture—specifically MoE expert offloading wi\n\n\n<tool_call>\n<function=web_extract>\n<parameter=char_limit>\n25000\n</parameter>\n<parameter=urls>\n[\"https://raw.githubusercontent.com/Niko1221/Strata/main/DETAILS.md\", \"https://raw.githubu …\n</parameter>\n</function>\n</tool_call>",
+   "input": "I need to check the DETAILS.md file to understand what llama.cpp actually supports for the qwen4exp architecture—specifically MoE expert offloading wi\n\n\n<tool_call>\n<function=web_extract>\n<parameter=char_limit>\n25000\n</parameter>\n<parameter=urls>\n[\"https://raw.githubusercontent.com/okkiv/Strata/main/DETAILS.md\", \"https://raw.githubu …\n</parameter>\n</function>\n</tool_call>",
    "calls": [
     "web_extract"
    ]

@@ -1,7 +1,7 @@
 # RX 7900 XTX support and performance evidence
 
 This opt-in Linux `gfx1100` backend supersedes the initial support in
-[PR #94](https://github.com/Niko1221/Strata/pull/94). It retains HIP runtime and
+[PR #94](https://github.com/okkiv/Strata/pull/94). It retains HIP runtime and
 wave32 integer-dot compatibility, native mmap layout validation, and MTP, then
 adds HIP MMQ, optional calibrated dense hipBLASLt GEMM, native prefill batching,
 and the host-memory / SSD paths used by the measured configuration. HIP blocking
@@ -134,7 +134,7 @@ validation of HIP multi-GPU support.
 
 The measurements above were taken before this backend was rebased onto engine 0.1.24. The PR's own batched
 embedding gather and QSA indexer append (adapted from
-[PR #108](https://github.com/Niko1221/Strata/pull/108), commit
+[PR #108](https://github.com/okkiv/Strata/pull/108), commit
 `acd487233c0bbe2217a6881c5bb43f8a283b0de5`) were dropped in the rebase: 0.1.24 already does both on every
 backend, bit-exact (C-2, C-4). #108's optional GDN parallel/split path is not included. Existing upstream MMQ orchestration is retained and enabled for
 HIP with AMD architecture identification and the correct backend compilation.

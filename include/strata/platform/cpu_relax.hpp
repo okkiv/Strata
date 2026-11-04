@@ -4,7 +4,7 @@
 // the doorbell the GPU polls).  aarch64: `yield` and `dmb oshst` - the outer-shareable store barrier is what
 // makes host stores visible to a coherent device (GB10 / Grace NVLink-C2C) before a later store.  Apple silicon (the
 // Metal build) keeps `dmb ishst`, the barrier its compat header (metal/include/metal_compat/immintrin.h) has always used.
-// Local port of the approach in https://github.com/Niko1221/Strata/pull/1077 onto main e8ca9af.
+// Local port of the approach in https://github.com/okkiv/Strata/pull/1077 onto main e8ca9af.
 #pragma once
 
 #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)

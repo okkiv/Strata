@@ -418,7 +418,7 @@ class GithubCheck(unittest.TestCase):
     def test_a_local_feed_is_told_from_the_signed_one(self):
         for feed in ("C:/feeds/f", "/tmp/feed", "file:///tmp/feed", "http://127.0.0.1:8099/feed.json", "https://localhost/f"):
             self.assertTrue(setup.local_feed(feed), feed)
-        for feed in (None, "", "https://github.com/Niko1221/Strata/releases/latest/download/feed.json"):
+        for feed in (None, "", "https://github.com/okkiv/Strata/releases/latest/download/feed.json"):
             with mock.patch.dict("os.environ", {"STRATA_UPDATE_FEED": ""}):
                 self.assertFalse(setup.local_feed(feed), feed)
         with mock.patch.dict("os.environ", {"STRATA_UPDATE_FEED": "/tmp/x"}):

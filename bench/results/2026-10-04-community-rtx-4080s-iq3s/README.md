@@ -283,7 +283,7 @@ load and we treat it as a cold-start outlier, not as a result.
 ### Where the 1M cost goes: the expert-cache budget, not the context tier
 
 This is the part that changed our conclusion. The mechanism was suggested by
-[enkynakamura in #781](https://github.com/Niko1221/Strata/issues/781) after reading the
+[enkynakamura in #781](https://github.com/okkiv/Strata/issues/781) after reading the
 first version of this report, and the numbers below are ours.
 
 The engine sizes the expert cache in two different ways. With `--expert-cache auto` it
