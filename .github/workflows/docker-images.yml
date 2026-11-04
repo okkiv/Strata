@@ -41,7 +41,7 @@ permissions:
   contents: read
 
 env:
-  IMAGE: ghcr.io/niko1221/strata
+  IMAGE: ghcr.io/okkiv/strata
 
 jobs:
   plan:
