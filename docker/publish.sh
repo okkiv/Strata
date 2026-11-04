@@ -29,7 +29,7 @@ set -eu
 
 here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 repo=$(CDPATH= cd -- "$here/.." && pwd -P)
-tag=""; source=""; version=""; flavors=""; image="ghcr.io/niko1221/strata"; work=""; push=""; latest=1; keepimg=""
+tag=""; source=""; version=""; flavors=""; image="ghcr.io/okkiv/strata"; work=""; push=""; latest=1; keepimg=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --release-tag) tag=$2; shift 2 ;;
