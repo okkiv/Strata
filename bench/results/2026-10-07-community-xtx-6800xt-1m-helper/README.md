@@ -52,14 +52,14 @@ each measured arm's full args/env. The Q8 extension alone was not a consistent
 whole-model win. Kernel bitwise parity and sampled model quality are different
 checks; neither proves identical generated text for a changed sampler/cache.
 
-The source incorporates or applies work from [#1181](https://github.com/Niko1221/Strata/pull/1181),
-[#1125](https://github.com/Niko1221/Strata/pull/1125),
-[#1123](https://github.com/Niko1221/Strata/pull/1123),
-[#1305](https://github.com/Niko1221/Strata/pull/1305),
-[#1240](https://github.com/Niko1221/Strata/pull/1240),
-[#1087](https://github.com/Niko1221/Strata/pull/1087),
-[#1281](https://github.com/Niko1221/Strata/pull/1281) and
-[#786](https://github.com/Niko1221/Strata/pull/786). The interleaved layout builds
+The source incorporates or applies work from [#1181](https://github.com/okkiv/Strata/pull/1181),
+[#1125](https://github.com/okkiv/Strata/pull/1125),
+[#1123](https://github.com/okkiv/Strata/pull/1123),
+[#1305](https://github.com/okkiv/Strata/pull/1305),
+[#1240](https://github.com/okkiv/Strata/pull/1240),
+[#1087](https://github.com/okkiv/Strata/pull/1087),
+[#1281](https://github.com/okkiv/Strata/pull/1281) and
+[#786](https://github.com/okkiv/Strata/pull/786). The interleaved layout builds
 on the upstream implementation credited to Eddoursul. These contributions belong
 to their original authors; the source history preserves that attribution.
 

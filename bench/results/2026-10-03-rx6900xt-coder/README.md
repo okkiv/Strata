@@ -19,7 +19,7 @@ Hardware snapshots, binary hashes, and the passing device self-test are stored a
 
 ## Installation
 
-Source: <https://github.com/Niko1221/Strata/releases/tag/v0.1.38>
+Source: <https://github.com/okkiv/Strata/releases/tag/v0.1.38>
 
 ```powershell
 .\.venv\Scripts\python.exe setup.py --yes --family coder --model IQ1_M --backend hip --context 65536 --vision no --host 127.0.0.1 --no-start

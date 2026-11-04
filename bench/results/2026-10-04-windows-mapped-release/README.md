@@ -18,8 +18,8 @@ lent cache slots have finished refilling, in serving and one-shot generation. Ot
 `STRATA_FILE_RELEASE=1` enables it; unset, `0`, or any other value leaves it disabled. The switch is read once
 per engine process, so restart the engine when changing it.
 
-This builds on the existing working-set handling in [#467](https://github.com/Niko1221/Strata/issues/467) and the
-mapped-arena work in [#640](https://github.com/Niko1221/Strata/pull/640). Multi-GPU placement already exists upstream;
+This builds on the existing working-set handling in [#467](https://github.com/okkiv/Strata/issues/467) and the
+mapped-arena work in [#640](https://github.com/okkiv/Strata/pull/640). Multi-GPU placement already exists upstream;
 this patch does not implement it. See Microsoft's [VirtualUnlock documentation](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualunlock).
 
 ## Configuration

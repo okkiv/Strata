@@ -416,7 +416,7 @@ class SetupArgs(unittest.TestCase):
                     text, nxt = comp.new_card_note
                     self.assertIn("new to Strata", text)
                     self.assertIn("--vision off", nxt)
-                    self.assertIn("github.com/Niko1221/Strata/issues", nxt)
+                    self.assertIn("github.com/okkiv/Strata/issues", nxt)
 
     def test_deepseek_on_an_rx_7000_card_says_once_that_it_is_untested(self):
         """The 0.2.9 update adds a DeepSeek package for gfx1100-1102; it was built and never run on a real RX 7000 card, and the Terminal and the app say so
@@ -436,7 +436,7 @@ class SetupArgs(unittest.TestCase):
             self.assertEqual(len(notes), 1 if expect else 0, (name, arch, family))
             if expect:
                 self.assertEqual(notes[0].level, "warn")
-                self.assertIn("github.com/Niko1221/Strata/issues", notes[0].next)
+                self.assertIn("github.com/okkiv/Strata/issues", notes[0].next)
 
     def test_a_mac_defaults_pictures_to_the_metal_reader_whatever_its_memory(self):
         for gb in (16.0, 32.0, 128.0):

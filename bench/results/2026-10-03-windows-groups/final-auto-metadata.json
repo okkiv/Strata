@@ -5,7 +5,7 @@
   "cache": "auto",
   "note": "Final group-affinity fix only; no hardware-specific worker cap.",
   "source_commit": "d828e8e2cea24908f9d24597e987257ed293acc1",
-  "code_pr": "https://github.com/Niko1221/Strata/pull/626",
+  "code_pr": "https://github.com/okkiv/Strata/pull/626",
   "effective_workers": 63,
   "effective_cache_slots": 2675,
   "startup_free_vram_mib": 1143,

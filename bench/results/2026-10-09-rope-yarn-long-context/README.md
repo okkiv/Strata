@@ -76,7 +76,7 @@ report does not implement an in-place switch or validate approximate cache
 migration followed by continuation to 1M.
 
 See [Strata's existing context-extension documentation](../../../docs/DETAILS.md)
-and the earlier [1M YaRN measurement, #348](https://github.com/Niko1221/Strata/issues/348).
+and the earlier [1M YaRN measurement, #348](https://github.com/okkiv/Strata/issues/348).
 
 ## Workload and measurement boundaries
 

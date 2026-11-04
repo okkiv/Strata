@@ -159,9 +159,13 @@ def variant(model: str | None) -> dict | None:
     return next((v for k, v in ISTA_SETS.items() if k.lower() == str(model).lower()), None)
 
 
-#: The AMD cards the DeepSeek engine package holds code for (packaging/build_hip_linux.sh: strata-dsv41 ships in the rx9070 build, gfx1200 and
-#: gfx1201).  setup passes the installed package's own list when it has one.
-DSV41_HIP_ARCHS = ("gfx1200", "gfx1201")
+#: The AMD cards the DeepSeek engine packages hold code for (packaging/build_hip_linux.sh: strata-dsv41 ships in the rx9070 build, gfx1200 and
+#: gfx1201, and in the rx7900 build, gfx1100 / gfx1101 / gfx1102 - built for the RX 7000 series, not run on a real card of it yet).  setup passes
+#: the installed package's own list when it has one.
+DSV41_HIP_ARCHS = ("gfx1200", "gfx1201", "gfx1100", "gfx1101", "gfx1102")
+#: The RDNA4 architectures alone (gfx1200 / gfx1201).  The engine's Faster-mode rules (src/dsv41/ds4_experts_rule.hpp single_rdna4 / multi_rdna4)
+#: are RDNA4 measurements, so an RX 7000 card never takes them.
+RDNA4_HIP_ARCHS = ("gfx1200", "gfx1201")
 
 
 def _on_windows() -> bool:
@@ -174,7 +178,7 @@ def run_cards(cards: list[dict] | None, vendor: str | None = None, *, windows: b
     `strata launch --plan`, setup and the app share, so the plan says what the run does.
     Every card that counts (gpu_fit.usable_cards: no integrated chip beside a card with memory of its own, no card under 8 GB).  AMD:
     on Windows one card only (several AMD cards sharing a model is Linux-only, setup.py), and only cards the engine package holds code for
-    (`covered`, default DSV41_HIP_ARCHS): a PC with an RX 9070 and an RX 7900 uses the RX 9070 and says why the other is left out.
+    (`covered`, default DSV41_HIP_ARCHS): a PC whose card the packages hold no code for (an RX 6000) is left out and said.
     `named`: the person named these cards: they are used as named (setup warns about one the package has no code for)."""
     mine = gpu_fit.for_vendor(list(cards or []), vendor)[0] if vendor else list(cards or [])
     keep, ignored = gpu_fit.usable_cards(mine)
@@ -214,7 +218,7 @@ def run_cards(cards: list[dict] | None, vendor: str | None = None, *, windows: b
 
 
 def _is_rdna4(card: dict) -> bool:
-    return str(card.get("vendor") or "").lower() == "amd" and str(card.get("arch") or "").lower().startswith(DSV41_HIP_ARCHS)
+    return str(card.get("vendor") or "").lower() == "amd" and str(card.get("arch") or "").lower().startswith(RDNA4_HIP_ARCHS)
 
 
 def rdna4_faster(cards: list[dict] | None, model: str | None, vendor: str | None = None, named: bool = False) -> bool:

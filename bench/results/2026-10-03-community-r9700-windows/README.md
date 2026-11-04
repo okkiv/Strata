@@ -27,7 +27,7 @@ failure, not as data.
 
 `docs/AMD_HIP.md` marks long contexts beyond 16K as **not validated** on RDNA4 and the
 maintainer's R9700 validation is Linux at 4K/16K; the Windows AMD report I could find
-([#499](https://github.com/Niko1221/Strata/issues/499), RX 9070 XT — still an **open,
+([#499](https://github.com/okkiv/Strata/issues/499), RX 9070 XT — still an **open,
 unmerged** PR) measures prompts to 31,059 tokens. The novelty here is **Windows + gfx1201 out
 to 248K**, not the hardware.
 
@@ -197,7 +197,7 @@ Needle recall:
   The ≈1.5 s figure does not describe the calibration requests: the 346.4 tok/s calibration
   follows a 129,816-token needle request in the same session (the one following the
   246,933-token request ran at 308.7 tok/s), while the same prompt as a fresh session's first
-  request takes 5.36 s; see [#519](https://github.com/Niko1221/Strata/issues/519).
+  request takes 5.36 s; see [#519](https://github.com/okkiv/Strata/issues/519).
 - **Every engine start performs a ≈26.7 GB one-off read** (26,741 MB and 26,779 MB by the two
   derivations below), which the log's cumulative counter folds into whichever request runs
   first: 31,214.5 MB on a 3,216-token calibration against 4,473 MB for the same prompt
@@ -221,7 +221,7 @@ Needle recall:
 - **KV streaming** hit VRAM for 94.3–99.4 % of block reads (4K 99.3, 32K 96.9–97.1, 128K
   95.0–95.1, 248K 94.3–95.0), 0.05–0.42 GiB from RAM per run; the needle prompts saw
   80.4–84.6 %. Decode expert-cache hit 99.4–99.9 % — the VRAM-resident share only;
-  `--pcie-frac` experts are in neither counter ([#588](https://github.com/Niko1221/Strata/issues/588)).
+  `--pcie-frac` experts are in neither counter ([#588](https://github.com/okkiv/Strata/issues/588)).
 - **Decode** is 99.8 / 97.8 / 89.9 / 87.5 tok/s; only the 32K→128K step (−8 %) is separable
   from noise (the 4K and 32K ranges both contain 95.3). TTFT is the engine's read time plus
   32–414 ms of client/frontend overhead (22 ms on the tiny calibration/warm-up rows). The 248K run at 75.1 tok/s lowers the
@@ -241,7 +241,7 @@ Needle recall:
   The string "fused" does not occur anywhere in the 732-line log, but nothing in this packet
   or upstream documents a banner the flag would print on HIP, so the only defensible statement
   is **no observable effect in one session per length**. `STRATA_PLE_BATCH=0` — the per-token
-  PLE block [#541](https://github.com/Niko1221/Strata/issues/541) names as the stall
+  PLE block [#541](https://github.com/okkiv/Strata/issues/541) names as the stall
   workaround, not a speed option — measured −12.8 % against `ab-default` / −21.3 % against
   `ab-default2` at 32K, in one session with no replicate. Raw legs:
   [default](bench-output-ab-default.json), [default2](bench-output-ab-default2.json),
@@ -261,15 +261,15 @@ Needle recall:
   one machine — it is not evidence the card is stall-free, and **this packet contains no stall
   at all** (the earlier stall was observed outside it, and its dump is not attached). A stall
   family is reported on this card by other users:
-  [#541](https://github.com/Niko1221/Strata/issues/541) (open; a different machine —
-  CachyOS/ROCm 7.2.4, R9700) and [#579](https://github.com/Niko1221/Strata/issues/579)
+  [#541](https://github.com/okkiv/Strata/issues/541) (open; a different machine —
+  CachyOS/ROCm 7.2.4, R9700) and [#579](https://github.com/okkiv/Strata/issues/579)
   (gfx1201 RX 9070 XT, Ubuntu/ROCm 10, still on 0.1.38). The v0.1.38 notes credit
-  [#382](https://github.com/Niko1221/Strata/issues/382) — the draft layer's prompt pass per
+  [#382](https://github.com/okkiv/Strata/issues/382) — the draft layer's prompt pass per
   group on HIP — as the fix for a gfx1201 prompt hang; that PR is closed without a GitHub merge
   (the maintainer's comment says it "went in by hand"), so no upstream source states the family
   is fully resolved.
 - **Engine version matters:** 0.1.38 reads the file tier unbuffered and
-  [#577](https://github.com/Niko1221/Strata/issues/577) measures prompts 15–40 % slower in
+  [#577](https://github.com/okkiv/Strata/issues/577) measures prompts 15–40 % slower in
   that regime (`STRATA_UNBUFFERED_LOAD=0` restores), so these prefill figures may *understate*
   a buffered configuration; no such leg was run.
 - **No recall check at 248K:** the 240K series ran no needles, so recall is evidenced only at

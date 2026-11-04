@@ -26,7 +26,7 @@ performance on other workloads.
   table is read from the GGUF shard on it (`--ple-io direct`, the default).
 - **OS and runtime:** Ubuntu 26.04, kernel 7.0.0-38-generic with its own amdgpu driver (no DKMS), ROCm 10.0.0 (HIP
   7.15.26333, rocBLAS 5.6.0). hipBLASLt ships no gfx1030 kernels, so the plain hipBLAS/rocBLAS path runs.
-- **Source, stock:** [Niko1221/Strata](https://github.com/Niko1221/Strata) `main` at `6f32ec0` (engine 0.1.39).
+- **Source, stock:** [okkiv/Strata](https://github.com/okkiv/Strata) `main` at `6f32ec0` (engine 0.1.39).
 - **Source, "PRs":** `6f32ec0` with #835 (`f8a6f4a`: the prompt path's 16-bit GEMMs FP16 in and out on gfx103x),
   #849 (`a649e42`: PR #540's attention kernel on gfx103x with 8 cells per step and DPP lane exchanges, bit-exact) and
   #854 (`ffca1b0`: a helper GPU's experts kept out of the PCIe share) merged locally. The PR branches since gained

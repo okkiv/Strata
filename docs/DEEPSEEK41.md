@@ -198,7 +198,9 @@ says so. The RAM store (`--ssd-cache`) sizes itself when the model starts, so th
 
 DeepSeek's engine, `strata-dsv41`, is a separate download from the Strata engine: when you choose DeepSeek, setup (or `strata launch`) fetches the
 package for your computer from the signed update feed (resumable, signature and every file checked) and installs it in `engine-dsv41/` beside
-`engine/`. The Qwen engine's files are never changed. If the feed has no package for your graphics card, setup says so in plain words and stops before
+`engine/`. The Qwen engine's files are never changed. On Linux the AMD `rx9070` (gfx1200 / gfx1201) and `rx7900` (gfx1100 / gfx1101 / gfx1102)
+engine packages carry it inside them as well. The RX 7000 series (an RX 7900 XTX down to an RX 7700 XT) is built for those cards and has never
+been run on one, so Strata says so before it starts and asks you to report how it went. If the feed has no package for your graphics card, setup says so in plain words and stops before
 anything big is downloaded. The Windows AMD package (`...-windows-x86_64-hip-rdna3`) carries the ROCm 10.2 runtime and the
 rocBLAS / hipBLASLt kernels for gfx1151 in `rocm/bin`, which Strata puts on the engine's library path.
 

@@ -34,7 +34,7 @@ token counts and timings. TTFT and total latency are client-side medians in seco
 | Before group-aware build | 31 | 4,022 | 318.13 | 44.99 | 12.72 | 18.42 | 423 MiB |
 | Experimental group-aware build | 31 | 4,022 | 315.39 | 34.60 | 12.83 | 20.13 | 145 MiB (LOW) |
 
-Both paired binaries contained an earlier automatic-worker proposal, bypassed by the explicit counts in every comparison. The final [code PR #626](https://github.com/Niko1221/Strata/pull/626) removes that proposal and leaves automatic worker sizing unchanged.
+Both paired binaries contained an earlier automatic-worker proposal, bypassed by the explicit counts in every comparison. The final [code PR #626](https://github.com/okkiv/Strata/pull/626) removes that proposal and leaves automatic worker sizing unchanged.
 
 At 63 explicit workers, the experimental group-aware build's decode medians were about 3.63 times the prior build's
 in both measured cases. The 4K prompt throughput changed little. The old 31-worker run decoded at 46.97/44.99 tok/s, while

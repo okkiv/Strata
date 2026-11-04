@@ -6,15 +6,29 @@ name: Docker images
 # For each flavor the job downloads the engine package from the release and checks it against the signed update feed
 # (docker/fetch-engines.py: the feed's Ed25519 signature, the archive's SHA-256, the manifest hash, the package signature,
 # every file's hash), builds the image with docker/build.sh and, only when "push" is on, pushes
-#   ghcr.io/niko1221/strata:<version>-<flavor>   and   ghcr.io/niko1221/strata:latest-<flavor>
+#   ghcr.io/okkiv/strata:<version>-<flavor>   and   ghcr.io/okkiv/strata:latest-<flavor>
 # The first run with "push" off builds everything without publishing it (a dry run).
+#
+# The packages come from a published release (release_tag). A feed you have not published yet goes in through `source`: the URL of a
+# folder holding strata-feed.json, its .sig and the archives, plus the image version to write on it.
 
 on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release tag whose engine packages go into the images (for example v0.2.7)'
-        required: true
+        description: 'Release tag whose engine packages go into the images (for example v0.2.7). Give this or source, not both'
+        required: false
+        default: ''
+        type: string
+      source:
+        description: 'URL of a folder with strata-feed.json, its .sig and the engine archives, instead of a release (a feed that is not published yet)'
+        required: false
+        default: ''
+        type: string
+      version:
+        description: 'Image version to write (for example 0.2.11-test). Required with source; with a release, empty means the tag without the v'
+        required: false
+        default: ''
         type: string
       flavors:
         description: 'Flavors to build, comma separated (empty: every flavor the release has a package for)'
@@ -48,18 +62,38 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       flavors: ${{ steps.list.outputs.flavors }}
+      fetch: ${{ steps.args.outputs.fetch }}
+      version: ${{ steps.args.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.source_ref || inputs.release_tag }}
+          ref: ${{ inputs.source_ref || inputs.release_tag || github.ref }}
+      - name: Where the packages come from, and the image version
+        id: args
+        env:
+          TAG: ${{ inputs.release_tag }}
+          SRC: ${{ inputs.source }}
+          VER: ${{ inputs.version }}
+        run: |
+          set -eu
+          [ -n "$TAG$SRC" ] || { echo "give a release tag or a source URL"; exit 2; }
+          if [ -n "$TAG" ] && [ -n "$SRC" ]; then echo "give a release tag or a source URL, not both"; exit 2; fi
+          if [ -n "$SRC" ]; then
+            [ -n "$VER" ] || { echo "a source URL needs the image version (for example 0.2.11-test)"; exit 2; }
+            echo "fetch=--source $SRC" >> "$GITHUB_OUTPUT"
+            echo "version=$VER" >> "$GITHUB_OUTPUT"
+          else
+            echo "fetch=--release-tag $TAG" >> "$GITHUB_OUTPUT"
+            echo "version=${VER:-${TAG#v}}" >> "$GITHUB_OUTPUT"
+          fi
       - name: Which flavors does the release have a package for
         id: list
         env:
           WANT: ${{ inputs.flavors }}
-          TAG: ${{ inputs.release_tag }}
+          FROM: ${{ steps.args.outputs.fetch }}
         run: |
           set -eu
-          args="--release-tag $TAG --list --skip-missing"
+          args="$FROM --list --skip-missing"
           [ -n "$WANT" ] && args="$args --flavors $WANT"
           python3 docker/fetch-engines.py $args > list.tsv
           cat list.tsv
@@ -82,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.source_ref || inputs.release_tag }}
+          ref: ${{ inputs.source_ref || inputs.release_tag || github.ref }}
       - name: Free disk space (the runner has about 14 GB; a package plus its image needs about 10 GB)
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
@@ -96,19 +130,20 @@ jobs:
         run: printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
       - name: Fetch, verify, build (and push when push is on)
         env:
-          TAG: ${{ inputs.release_tag }}
+          FROM: ${{ needs.plan.outputs.fetch }}
+          VERSION: ${{ needs.plan.outputs.version }}
           FLAVOR: ${{ matrix.flavor }}
           PUSH: ${{ inputs.push && '--push' || '' }}
           LATEST: ${{ !inputs.latest && '--no-latest' || '' }}
         run: |
-          docker/publish.sh --release-tag "$TAG" --flavors "$FLAVOR" --image "$IMAGE" $PUSH $LATEST
+          docker/publish.sh $FROM --version "$VERSION" --flavors "$FLAVOR" --image "$IMAGE" $PUSH $LATEST
       - name: Summary
         if: ${{ always() }}
         run: |
           {
             echo "### ${{ matrix.flavor }}"
-            echo "- release: ${{ inputs.release_tag }}, pushed: ${{ inputs.push }}"
-            echo "- image: \`$IMAGE:${INPUT_TAG#v}-${{ matrix.flavor }}\`"
+            echo "- packages: ${{ inputs.source || inputs.release_tag }}, pushed: ${{ inputs.push }}"
+            echo "- image: \`$IMAGE:$VERSION-${{ matrix.flavor }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
         env:
-          INPUT_TAG: ${{ inputs.release_tag }}
+          VERSION: ${{ needs.plan.outputs.version }}

@@ -2,7 +2,7 @@
 
 Measured on 2026-10-03 with Coder IQ1_M on native Windows 11 Pro 10.0.26300. The 3990X has 64 physical cores / 128 logical processors, 128 GiB DDR4-3200, and **one NUMA node spanning two processor groups**. The RX 6900 XT has 16 GiB VRAM (gfx1030), driver 32.0.21045.5002.
 
-With the same explicit 63 workers and 3,245 effective expert-cache slots, decode medians changed from **12.69 to 46.09 tok/s** for short inputs and **13.08 to 47.43 tok/s** for 4K inputs after preserving processor groups when pinning threads. The implementation is [PR #626](https://github.com/Niko1221/Strata/pull/626). It leaves automatic worker sizing unchanged. See the [full report](../../../docs/benchmarks/windows-zen2-gfx1030-workers.md) for all rows and limitations, and [PROBE.md](PROBE.md) for the topology/API probe.
+With the same explicit 63 workers and 3,245 effective expert-cache slots, decode medians changed from **12.69 to 46.09 tok/s** for short inputs and **13.08 to 47.43 tok/s** for 4K inputs after preserving processor groups when pinning threads. The implementation is [PR #626](https://github.com/okkiv/Strata/pull/626). It leaves automatic worker sizing unchanged. See the [full report](../../../docs/benchmarks/windows-zen2-gfx1030-workers.md) for all rows and limitations, and [PROBE.md](PROBE.md) for the topology/API probe.
 
 ## Provenance and conditions
 

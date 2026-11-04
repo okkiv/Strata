@@ -158,5 +158,5 @@ timing lines: [engine-timings.txt](engine-timings.txt).
   slots. All numbers are warm (the P100 helper fills on the first large
   request; the first ~2 big requests after a restart run 20–30% slower while it
   fills).
-- Reported previously in [issue #1079](https://github.com/Niko1221/Strata/issues/1079)
+- Reported previously in [issue #1079](https://github.com/okkiv/Strata/issues/1079)
   (V100+P100 helper, 0.1.39 → 0.1.40 decode +6–11%).

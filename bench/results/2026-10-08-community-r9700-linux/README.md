@@ -7,7 +7,7 @@ IQ2_XS is a separate quantization contrast. [中文摘要](ACCELERATION.zh-CN.md
 The product-style IQ3_S configuration generated **87.6–101.9 tokens/s**, taking the median at each
 of four input lengths from 1K through 128K. Separately, five controlled pairs found **16.18% / 14.07%
 lower native TTFT** for 512 / 900 new tokens after 32K retained history with the short-input grouped
-gather from [#1107](https://github.com/Niko1221/Strata/pull/1107). Other shapes include regressions;
+gather from [#1107](https://github.com/okkiv/Strata/pull/1107). Other shapes include regressions;
 this does not establish an all-workload improvement.
 
 The measured source is a frozen experimental 0.1.40.3 build based on `d5ea713`, not the newer upstream
@@ -126,7 +126,7 @@ not cancel them. No all-workload performance or general answer-quality acceptanc
 Historical numerical diagnostics, rejected tuning and optional HTTP checks are in the
 [original full archive](https://github.com/zihaomu/Strata/tree/17006083063b4443458f6f0b3f5c8325cf9cca2a/bench/results/2026-10-08-community-r9700-linux).
 The source includes an architecture-scoped signed-zero fix related to
-[#1474](https://github.com/Niko1221/Strata/issues/1474) / [#1540](https://github.com/Niko1221/Strata/pull/1540);
+[#1474](https://github.com/okkiv/Strata/issues/1474) / [#1540](https://github.com/okkiv/Strata/pull/1540);
 it is not a measurement of #1540's broader patch. Those diagnostic results are separate from the
 performance tables. Native IQ/MMQ, MTP, auto cache and KV streaming were existing capabilities;
 no separate gains are assigned to them. Windows, other GPUs/variants, concurrent serving and newer

@@ -43,7 +43,9 @@ Strix Point (890M / 880M, gfx1150) and Krackan (860M / 840M, gfx1152) are named 
 (gfx1012) builds by hand: [OLDER_GPUS.md](OLDER_GPUS.md#amd-building-gfx906-and-gfx1012).
 
 DeepSeek V4.1-Flash runs on the Radeon AI PRO R9700 on Linux, in the app and in the Terminal. The RX 9070 (gfx1200) engine package
-carries it but it is untested. Details: [MODELS.md](MODELS.md#deepseek-v41-flash).
+carries it but it is untested. The RX 7000 series (gfx1100 / gfx1101 / gfx1102) gets it in the Linux `rx7900` package since 0.2.10: built
+for those cards, never run on one, so Strata says so before it starts and asks for a report. Details:
+[MODELS.md](MODELS.md#deepseek-v41-flash).
 
 <a id="ready-made-packages-023"></a>
 ## Ready-made packages
@@ -132,7 +134,7 @@ reused. The Monitor shows the card's load, VRAM, temperature and power from Linu
 ## Windows
 
 Install the [app](INSTALL.md) (`Strata-0.2.9-windows-x64-setup.exe` from the
-[release page](https://github.com/Niko1221/Strata/releases/latest); it downloads the engine for the card), or
+[release page](https://github.com/okkiv/Strata/releases/latest); it downloads the engine for the card), or
 install the [Terminal](INSTALL.md#the-terminal) and run `strata launch`. You need Windows 10 or 11 (64-bit), a supported card
 and a current AMD driver. No ROCm or HIP SDK, no compiler, no admin rights. `START-HERE.bat --backend hip` is a
 source-checkout option for developers, not a way to start the released app.
@@ -289,7 +291,7 @@ table) did not clear it; removing `STRATA_SH_STREAM` did. Two RX 6900 XT under L
 32768`) have served without the fault since 0.1.40. It is one PC and one card, and the faulting kernel was not isolated. So `--calibrate` does
 not measure the fork on Windows when KV streaming is on, `strata tune` never picks it there, and a config that sets it by hand gets a warning
 line at the start; nothing is refused. If you have an RX 6000 card on Windows and want to help, run it once with `STRATA_SH_STREAM=1` and
-`--kv-resident` and tell us in [#3895](https://github.com/Niko1221/Strata/pull/3895) whether the first request answered, with the card and the driver.
+`--kv-resident` and tell us in [#3895](https://github.com/okkiv/Strata/pull/3895) whether the first request answered, with the card and the driver.
 
 
 ## Speed switches

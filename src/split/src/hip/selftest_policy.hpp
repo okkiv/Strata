@@ -16,7 +16,7 @@
 
 namespace fnx {
 
-constexpr const char* SPLIT_REPORT_URL = "https://github.com/Niko1221/Strata/issues/new?template=amd_split_report.yml";
+constexpr const char* SPLIT_REPORT_URL = "https://github.com/okkiv/Strata/issues/new?template=amd_split_report.yml";
 
 // the architectures Strata has run the split on (gcnArchName starts with one of these)
 inline bool arch_tested(const std::string& gcn_arch) { return gcn_arch.rfind("gfx1201", 0) == 0; }

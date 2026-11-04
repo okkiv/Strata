@@ -48,7 +48,7 @@ missing combination.
 **An update says it succeeded but `strata --version` is still old.**
 The Terminal switches to the updated Control on the next command, so run `strata --version` again. If it is still old,
 run the one-line installer once more; it keeps models and settings. The app, Control and engine have separate version
-numbers; see [updating](INSTALL.md#updating) and the [release notes](https://github.com/Niko1221/Strata/releases).
+numbers; see [updating](INSTALL.md#updating) and the [release notes](https://github.com/okkiv/Strata/releases).
 
 **A new engine misbehaves after an update.**
 Stop the model, then use the app's rollback control or `strata components rollback`. An update keeps the engine it
@@ -368,6 +368,6 @@ overwrite local branches or edits just to make `git pull` succeed.
 
 Look through a log before you send it, and never send an API key. Include model and quantization, OS, GPU/VRAM, RAM,
 driver, install route (app, Terminal or the installer), Strata and engine versions, exact command, expected result and
-actual error. Open an [issue](https://github.com/Niko1221/Strata/issues) and attach the log. Follow
+actual error. Open an [issue](https://github.com/okkiv/Strata/issues) and attach the log. Follow
 [CONTRIBUTING.md](../CONTRIBUTING.md). The full table of error messages, with the older engine fixes, is in the
 [details](DETAILS.md#troubleshooting).

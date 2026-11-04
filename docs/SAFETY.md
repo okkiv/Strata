@@ -46,7 +46,7 @@ Like any download, each connection below shows the other side your IP address an
 | --- | --- | --- |
 | Model files, the picture reader, the speed-up layer (MTP) | huggingface.co, or the mirror in `HF_ENDPOINT` if you set one | When you install a model |
 | The same files from ModelScope, for PCs that cannot reach Hugging Face | modelscope.cn | Only if you ask for it (`--source modelscope`). Strata never switches to it by itself |
-| Engine, Terminal and Control updates | The signed feed on GitHub Releases of Niko1221/Strata | When you install an engine, press **Update engine** or **Check for updates**, or run `strata update`; the DeepSeek engine also on `strata launch` (below). Opening **Settings, Engine** does not connect: it shows the result of your last check |
+| Engine, Terminal and Control updates | The signed feed on GitHub Releases of okkiv/Strata | When you install an engine, press **Update engine** or **Check for updates**, or run `strata update`; the DeepSeek engine also on `strata launch` (below). Opening **Settings, Engine** does not connect: it shows the result of your last check |
 | App updates | `latest.json` on the same GitHub Releases, through Tauri's updater | When you press **Check for updates** or **Update Strata** |
 | llama.cpp source code (a fixed commit) | github.com/ggml-org/llama.cpp | During a model install, if it is not on your PC yet. Strata uses only its model-preparation scripts |
 | Web search and web pages | DuckDuckGo, with Bing as the second source; or Exa, Perplexity or DeepSeek if you save a key for them. Any page the agent is asked to open goes to that page's site | When the agent uses its search or "open web pages" tool. In Manual mode it asks you first, once per chat |
@@ -145,7 +145,7 @@ check off, and it is never on by default.
 
 **The one-line install** (`curl ... | sh`, `irm ... | iex`) checks the Terminal archive's SHA-256 and the signed feed with the
 Terminal it just unpacked. The checksum and the key come from the same release as the archive, so the first install trusts
-HTTPS and the `Niko1221/Strata` release itself. What that means, and how to read the script first, is in
+HTTPS and the `okkiv/Strata` release itself. What that means, and how to read the script first, is in
 [SECURITY.md](../SECURITY.md#how-far-to-trust-curl--sh-and-irm--iex). Later updates are checked against the key already on
 your PC.
 
@@ -193,12 +193,12 @@ The agent runs on a loopback address with a random token, so other programs on t
 
 ## Open source and reporting a problem
 
-Strata is MIT-licensed and the whole code is at [github.com/Niko1221/Strata](https://github.com/Niko1221/Strata). Read it, build
+Strata is MIT-licensed and the whole code is at [github.com/okkiv/Strata](https://github.com/okkiv/Strata). Read it, build
 it and compare. Strata has not had an outside security audit yet.
 
 To report a security problem, use GitHub's private reporting (the repository's **Security** tab), as described in
 [SECURITY.md](../SECURITY.md). Ordinary questions and ideas can go to an
-[issue](https://github.com/Niko1221/Strata/issues).
+[issue](https://github.com/okkiv/Strata/issues).
 
 ## Where to check this in the code
 

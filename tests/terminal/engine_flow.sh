@@ -22,7 +22,7 @@ cleanup() { for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kill "$p" 2>/dev/null; do
 trap cleanup EXIT
 
 mkdir -p "$W"/{rel28,rel29,pkg,term,home}
-BASE=https://github.com/Niko1221/Strata/releases/download
+BASE=https://github.com/okkiv/Strata/releases/download
 ENG54=strata-engine-0.1.54-linux-x86_64-cuda-cuda13.tar.gz
 ENG55=strata-engine-0.1.55-linux-x86_64-cuda-cuda13.tar.gz
 

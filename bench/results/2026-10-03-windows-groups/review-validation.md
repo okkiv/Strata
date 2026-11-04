@@ -1,6 +1,6 @@
 # Host-restoration review follow-up (2026-10-03)
 
-Source: [d72bd06](https://github.com/Yasei-no-otoko/Strata/commit/d72bd0668550bca29e9e69d20b970ce7ffa7e6fd), [PR #626 review](https://github.com/Niko1221/Strata/pull/626#discussion_r4173337650).
+Source: [d72bd06](https://github.com/Yasei-no-otoko/Strata/commit/d72bd0668550bca29e9e69d20b970ce7ffa7e6fd), [PR #626 review](https://github.com/okkiv/Strata/pull/626#discussion_r4173337650).
 
 The host now saves and restores its explicit Windows CPU Set selection. An originally empty selection is cleared on restoration, returning to process defaults without changing the caller's hard affinity or implicit Windows 11 all-group eligibility. Pool-owned worker threads retain hard processor-group affinity.
 

@@ -19,7 +19,7 @@ holds the technical context behind the short [README](../README.md). Use [AI_SET
   See [LICENSE](../LICENSE) and [component/model licensing](HOW_IT_WORKS.md#license).
 - Local inference does not mean every feature is offline. Downloads, updates, remote tools and user-enabled
   network access have separate behavior. Use [SAFETY.md](SAFETY.md) for privacy and network claims.
-- Verify the current app and engine versions in the [release notes](https://github.com/Niko1221/Strata/releases).
+- Verify the current app and engine versions in the [release notes](https://github.com/okkiv/Strata/releases).
   A screenshot, translated README or historical benchmark is not a version source.
 
 ## Model families
@@ -29,7 +29,8 @@ not additional top-level families.
 
 | Family | Availability evidence | Catalog and limits |
 | --- | --- | --- |
-| DeepSeekV4.1-Flash-1017 | `deepseek41` in `MULTI_FILE_FAMILIES` in [setup.py](../setup.py); Terminal since 0.2.4, desktop app since 0.2.5 | [MODELS.md](MODELS.md#deepseek-v41-flash): ISTA-DAS 1.75 bpw (239 GB), 2.00 bpw (257 GB) and 2.25 bpw (274 GB), 8K context, a Speed choice (Faster or Full quality). NVIDIA RTX 30, 40 and 50 (Windows, Linux), AMD Radeon AI PRO R9700 (Linux) and Ryzen AI Max / Strix Halo (Windows, gfx1151). Not on Mac, Intel Arc or Strix Halo on Linux yet. |
+| DeepSeekV4.1-Flash-1017 | `deepseek41` in `MULTI_FILE_FAMILIES` in [setup.py](../setup.py); Terminal since 0.2.4, desktop app since 0.2.5 | [MODELS.md](MODELS.md#deepseek-v41-flash): ISTA-DAS 1.75 bpw (239 GB), 2.00 bpw (257 GB) and 2.25 bpw (274 GB), 8K context, a Speed choice (Faster or Full quality). NVIDIA RTX 30, 40 and 50 (Windows, Linux), AMD Radeon AI PRO R9700 (Linux), AMD Radeon RX 7000 series (Linux, built for gfx1100 / gfx1101 /
+gfx1102 and never run on one) and Ryzen AI Max / Strix Halo (Windows, gfx1151). Not on Mac, Intel Arc or Strix Halo on Linux yet. |
 | Qwen3.8-Flash-Next | Catalog entries in [setup.py](../setup.py), model guides and backend documentation | [MODELS.md](MODELS.md), [QUANTS.md](QUANTS.md), [GYRO.md](GYRO.md), [NVFP4.md](NVFP4.md), [ORCA.md](ORCA.md) |
 | Qwen3.6-35B-A3B | `qwen36` in `OWN_PATH_FAMILIES` in [setup.py](../setup.py) | [QWEN36.md](QWEN36.md): NVIDIA and AMD; not the Intel or Mac engine |
 

@@ -181,7 +181,7 @@ def main():
     if not os.path.exists(TABLE):
         sys.exit(f"table missing: {TABLE} - tune it first (see record-hipblaslt-100500)")
     state = {"record": "hipblaslt-100500-unconfound", "at": TS,
-             "pr": "https://github.com/Niko1221/Strata/pull/745",
+             "pr": "https://github.com/okkiv/Strata/pull/745",
              "method": ("rates_amd.py methodology on the PR #745 nightly candidate (ROCm 10.2 "
                         "nightly SDK + rocWMMA, spec 3): one-shot strata generate, greedy, 256 "
                         "generated tokens; prefill_tok_s = prompt_tokens / GPU_timeline_s; median "

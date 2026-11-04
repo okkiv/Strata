@@ -164,7 +164,7 @@ test('#4721 a plain click on a web address goes to the default browser; the app 
 test('#4721 only a website goes to the browser; a file keeps the side panel', async () => {
   globalThis.location = { origin: 'http://127.0.0.1:1' };
   const { artifactFromUrl } = await withI18n('artifacts.ts');
-  for (const url of ['https://example.com/docs', 'https://github.com/Niko1221/Strata/issues/4721', 'http://localhost:3000/']) assert.equal(artifactFromUrl(url).kind, 'website', url);
+  for (const url of ['https://example.com/docs', 'https://github.com/okkiv/Strata/issues/4721', 'http://localhost:3000/']) assert.equal(artifactFromUrl(url).kind, 'website', url);
   for (const [url, kind] of [['https://example.com/a.pdf', 'pdf'], ['https://example.com/a.png', 'image'], ['https://example.com/a.csv', 'table'], ['https://example.com/a.ts', 'code'], ['https://example.com/readme.md', 'markdown']]) assert.equal(artifactFromUrl(url).kind, kind, url);
   assert.equal(artifactFromUrl('javascript:alert(1)'), null);
   const chat = src('screens/Chat.tsx');
