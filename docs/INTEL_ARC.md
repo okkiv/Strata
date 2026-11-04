@@ -39,7 +39,7 @@ group (`strata doctor` says so). It was tested on an Arc A750 and, in 0.2.10, on
 
 The source and container workflow ([INTEL.md](INTEL.md#setup)) still exists for building the engine yourself; the Terminal does not need it.
 
-Docker: the ready-made image is `ghcr.io/niko1221/strata:0.2.3-sycl`, published only for a release that carries a Linux Intel
+Docker: the ready-made image is `ghcr.io/okkiv/strata:0.2.3-sycl`, published only for a release that carries a Linux Intel
 engine package. Otherwise [build the image yourself](DOCKER.md#build-it-yourself). The image needs prepared model files
 ([Docker: Intel Arc](DOCKER.md#intel-arc)).
 

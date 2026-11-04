@@ -207,8 +207,8 @@ class Document(unittest.TestCase):
         doc = (ROOT / "docs" / "DOCKER.md").read_text(encoding="utf-8")
         for tag in ("0.2.7-cuda13", "0.2.7-cuda12", "0.2.7-rocm-gfx120x", "0.2.7-rocm-gfx110x", "0.2.7-rocm-gfx1151", "0.2.7-sycl"):
             self.assertIn(tag, doc)
-        for name, tag in (("docker-compose.nvidia.yml", "ghcr.io/niko1221/strata:0.2.7-cuda13"), ("docker-compose.amd.yml", "ghcr.io/niko1221/strata:0.2.7-rocm-gfx120x"),
-                          ("docker-compose.intel.yml", "ghcr.io/niko1221/strata:0.2.7-sycl")):
+        for name, tag in (("docker-compose.nvidia.yml", "ghcr.io/okkiv/strata:0.2.7-cuda13"), ("docker-compose.amd.yml", "ghcr.io/okkiv/strata:0.2.7-rocm-gfx120x"),
+                          ("docker-compose.intel.yml", "ghcr.io/okkiv/strata:0.2.7-sycl")):
             self.assertIn(tag, (DOCKER / "compose" / name).read_text(encoding="utf-8"))
 
     def test_the_user_doc_says_images_are_published_from_0_2_1(self):

@@ -19,7 +19,7 @@
 #   --source DIR|URL     use this folder or URL (with strata-feed.json, its .sig and the archives) instead of the GitHub release
 #   --version V          image version (default: the tag without v)
 #   --flavors LIST       comma separated (default: all that the release has: cuda13 cuda12 rocm-gfx120x rocm-gfx110x rocm-gfx1151 sycl)
-#   --image NAME         image repository (default ghcr.io/niko1221/strata)
+#   --image NAME         image repository (default ghcr.io/okkiv/strata)
 #   --work DIR           where packages are unpacked (default a temporary folder, removed at the end)
 #   --push               push the images (default: build only)
 #   --no-latest          do not tag / push latest-<flavor>
