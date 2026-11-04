@@ -1,0 +1,435 @@
+name: Release (Linux AMD)
+
+# Builds and publishes one Strata release whose engine packages are the Linux x86_64 AMD (HIP/ROCm) ones, together with the
+# Terminal (Control) bundle for linux-x86_64, the signed update feed and the hip container image. Run by hand only
+# (Actions tab -> Release (Linux AMD) -> Run workflow); nothing starts it on its own.
+#
+# The engine build runs in an `ubuntu:22.04` container: the released AMD packages were built in an Ubuntu 22.04 chroot
+# (glibc 2.35), so they run on every distribution since, and building on the 24.04 runner would tie them to a newer glibc.
+# ROCm comes from AMD's TheRock Python wheels (no sudo, the same wheels setup.py installs); the version is read from
+# setup.py's picker, because the nightly indexes are pruned and every GPU family has its own range. The runner has about
+# 14 GB free and the wheels about 10 GB, so the pip cache and the downloaded wheels are deleted right after the install.
+#
+# There is no graphics card on a runner: the engine is compiled and linked and its package is checked (binary_deps, the
+# manifest, the signature), but running it on a real card stays a manual acceptance step.
+#
+# Only these assets are made here. Everything else the `latest` release must carry (the app installers, `latest.json`, the
+# other engine archives, the other Terminal bundles and the extra feed file) rides over from the previous release in `carry`,
+# because installers, `strata update` and the app updater read releases/latest/download. This workflow writes no `latest.json`:
+# that is the app updater's file, and it has no app build.
+#
+# The feed key is the repository secret FEED_KEY_JSON. It is written to a file in $RUNNER_TEMP (never in the checkout, which
+# feed_tool refuses) and used to sign the engine packages and the feed.
+#
+# A pre-release is invisible to releases/latest/download, so install.sh, strata update and the app updater 404 against it:
+# publish as a normal release when clients must find it.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The release tag (for example v0.2.11, or v0.2.11-pre). Empty: the ref this run is on'
+        required: false
+        default: ''
+        type: string
+      variants:
+        description: 'AMD variants to build, comma separated (rx9070, rx7900, rx6000, halo)'
+        required: false
+        default: 'rx9070,rx7900'
+        type: string
+      sequence:
+        description: 'Feed sequence number (empty: one above the sequence of the newest published release)'
+        required: false
+        default: ''
+        type: string
+      publish:
+        description: 'Publish the release (off: it is created as a draft, nothing goes live and no image is pushed)'
+        required: true
+        default: false
+        type: boolean
+      prerelease:
+        description: 'Mark the release as a pre-release (releases/latest/download does not find it)'
+        required: true
+        default: false
+        type: boolean
+      docker:
+        description: 'Build and push the hip container images after the release is live'
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.read.outputs.tag }}
+      app_version: ${{ steps.read.outputs.app_version }}
+      engine_version: ${{ steps.read.outputs.engine_version }}
+      commit: ${{ steps.read.outputs.commit }}
+      sequence: ${{ steps.read.outputs.sequence }}
+      matrix: ${{ steps.read.outputs.matrix }}
+      flavors: ${{ steps.read.outputs.flavors }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: The two versions, the tag, the sequence, the build matrix
+        id: read
+        env:
+          WANT_TAG: ${{ inputs.tag }}
+          WANT_SEQ: ${{ inputs.sequence }}
+          VARIANTS: ${{ inputs.variants }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          APP=$(python3 -c 'import tomllib; print(tomllib.load(open("apps/desktop/src-tauri/Cargo.toml", "rb"))["package"]["version"])')
+          ENG=$(sed -n 's/^project(strata VERSION \([0-9.]*\) LANGUAGES CXX)$/\1/p' CMakeLists.txt)
+          [ -n "$APP" ] && [ -n "$ENG" ] || { echo "::error::could not read the app version or the engine version"; exit 1; }
+          TAG=${WANT_TAG:-$GITHUB_REF_NAME}
+          case "$TAG" in
+            "v$APP"|v$APP-*) ;;
+            *) echo "::error::the tag $TAG is not v$APP and does not start with v$APP-: the app version is in apps/desktop/src-tauri/Cargo.toml, the engine version in CMakeLists.txt"; exit 1 ;;
+          esac
+          SEQ=$WANT_SEQ
+          if [ -z "$SEQ" ]; then
+            PREV=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '[.[] | select(.draft | not)][0].tag_name // ""')
+            if [ -n "$PREV" ] && FEED=$(curl -fsSL -H "Authorization: Bearer $GITHUB_TOKEN" "https://github.com/$GITHUB_REPOSITORY/releases/download/$PREV/strata-feed.json"); then
+              SEQ=$(( $(printf '%s' "$FEED" | python3 -c 'import json,sys; print(json.load(sys.stdin)["sequence"])') + 1 ))
+            else
+              SEQ=1                     # no published release yet: this one starts the count
+            fi
+          fi
+          python3 - "$VARIANTS" > "$RUNNER_TEMP/matrix.json" <<'PY'
+          import json, sys
+          BASE = "https://rocm.nightlies.amd.com/v2/"
+          FAMILY = {"rx9070": ("gfx120X-all", "rocm-gfx120x"),       # gfx1200 gfx1201 (RX 9070, R9700)
+                    "rx7900": ("gfx110X-dgpu", "rocm-gfx110x"),      # gfx1100 gfx1101 gfx1102 (RX 7000)
+                    "rx6000": ("gfx103X-all", ""),                   # gfx1030 gfx1031: the images have no flavor for it
+                    "halo": ("gfx1151", "rocm-gfx1151")}             # Strix Halo
+          rows = []
+          for v in [x.strip() for x in sys.argv[1].split(",") if x.strip()]:
+              if v not in FAMILY:
+                  raise SystemExit(f"no TheRock wheel index is mapped for the variant {v} (known: {', '.join(FAMILY)})")
+              family, flavor = FAMILY[v]
+              rows.append({"variant": v, "index": BASE + family + "/", "flavor": flavor})
+          print(json.dumps(rows))
+          PY
+          FLAVORS=$(python3 -c 'import json,sys; print(",".join(r["flavor"] for r in json.load(open(sys.argv[1])) if r["flavor"]))' "$RUNNER_TEMP/matrix.json")
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "app_version=$APP" >> "$GITHUB_OUTPUT"
+          echo "engine_version=$ENG" >> "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "sequence=$SEQ" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(cat "$RUNNER_TEMP/matrix.json")" >> "$GITHUB_OUTPUT"
+          echo "flavors=$FLAVORS" >> "$GITHUB_OUTPUT"
+          echo "tag $TAG (app $APP, engine $ENG), sequence $SEQ, variants $VARIANTS, images ${FLAVORS:-none}"
+
+  engine-hip:
+    needs: plan
+    runs-on: ubuntu-24.04
+    container:
+      image: ubuntu:22.04
+      options: -v /:/host          # the container's disk is the runner's disk; /host is how the build tools free it
+    timeout-minutes: 420
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      PKGVER: ${{ needs.plan.outputs.engine_version }}
+      COMMIT: ${{ needs.plan.outputs.commit }}
+      VARIANT: ${{ matrix.variant }}
+      INDEX: ${{ matrix.index }}
+    steps:
+      - name: Free the runner's disk (about 14 GB free; the ROCm wheels are about 10 GB and the installed SDK about 8 GB)
+        run: |
+          rm -rf /host/usr/share/dotnet /host/usr/local/lib/android /opt/ghc /host/opt/hostedtoolcache/CodeQL || true
+          df -h /
+      - name: Build tools (the ubuntu:22.04 image has no git, and actions/checkout needs it)
+        run: |
+          set -eu
+          apt-get update
+          apt-get install -y --no-install-recommends git curl ca-certificates python3 python3-venv python3-pip \
+            patchelf binutils file zip xz-utils
+          rm -rf /var/lib/apt/lists/*
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: ROCm from AMD's TheRock wheels (the version setup.py's picker offers for this index)
+        run: |
+          set -eu
+          python3 -m venv "$RUNNER_TEMP/rocm"
+          VPY="$RUNNER_TEMP/rocm/bin/python3"
+          "$VPY" -m pip install --no-cache-dir --quiet cmake ninja
+          PICK=$(python3 -c 'import importlib.util, sys; s = importlib.util.spec_from_file_location("strata_setup", "setup.py"); m = importlib.util.module_from_spec(s); sys.modules["strata_setup"] = m; s.loader.exec_module(m); v, note = m.rocm_wanted(sys.argv[1]); print(v); print(note or "")' "$INDEX")
+          VER=$(printf '%s\n' "$PICK" | head -1)
+          NOTE=$(printf '%s\n' "$PICK" | tail -1)
+          [ -z "$NOTE" ] || echo "::warning::$NOTE"      # setup.py fell back to its pinned version: the index was pruned
+          echo "installing ROCm $VER from $INDEX"
+          "$VPY" -m pip install --no-cache-dir --quiet --index-url "$INDEX" "rocm[libraries,devel]==$VER"
+          HP=$("$RUNNER_TEMP/rocm/bin/rocm-sdk" path --root)
+          [ -x "$HP/llvm/bin/clang++" ] || { echo "::error::the ROCm SDK at $HP has no llvm/bin/clang++"; exit 1; }
+          SP=$("$VPY" -c 'import sysconfig; print(sysconfig.get_paths()["purelib"])')
+          FAM=${INDEX%/}; FAM=${FAM##*/}
+          LIBW=$(python3 -c 'import sysconfig, sys; from pathlib import Path; sp = Path(sysconfig.get_paths()["purelib"]); want = "_rocm_sdk_libraries_" + sys.argv[1].replace("-", "_").lower(); hits = [d for d in sp.glob("_rocm_sdk_libraries_*") if d.name.lower() == want]; print(hits[0] if hits else "")' "$FAM")
+          [ -n "$LIBW" ] && [ -d "$LIBW/lib" ] || { echo "::error::no $LIBW card-family libraries in $SP"; exit 1; }
+          CORE="$SP/_rocm_sdk_core"; [ -d "$CORE" ] || CORE="$HP"
+          echo "HP=$HP" >> "$GITHUB_ENV"
+          echo "CORE=$CORE" >> "$GITHUB_ENV"
+          echo "LIBW=$LIBW" >> "$GITHUB_ENV"
+          echo "LLAMA_CPP_COMMIT=$(python3 -c 'import re; print(re.search(r"^LLAMA_CPP_COMMIT = \"([0-9a-f]+)\"", open("setup.py").read(), re.M).group(1))')" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/rocm/bin" >> "$GITHUB_PATH"
+          rm -rf /root/.cache/pip
+          find "$RUNNER_TEMP/rocm" -name '*.whl' -delete
+          df -h /
+      - name: llama.cpp (ggml) at the pinned commit
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/llama.cpp" && cd "$RUNNER_TEMP/llama.cpp"
+          git init -q
+          git remote add origin https://github.com/ggml-org/llama.cpp.git
+          git fetch -q --depth 1 origin "$LLAMA_CPP_COMMIT"
+          git checkout -q FETCH_HEAD
+      - name: The feed key must be there to sign with
+        env:
+          FEED_KEY_JSON: ${{ secrets.FEED_KEY_JSON }}
+        run: |
+          set -eu
+          [ -n "$FEED_KEY_JSON" ] || { echo "::error::the secret FEED_KEY_JSON is empty: add the feed key under Settings -> Secrets and variables -> Actions (packaging/UPDATES.md)"; exit 1; }
+      - name: Compile, stage, sign and pack the engine
+        env:
+          FEED_KEY_JSON: ${{ secrets.FEED_KEY_JSON }}
+        run: |
+          set -eu
+          printf '%s' "$FEED_KEY_JSON" > "$RUNNER_TEMP/feed-key.json"
+          chmod 600 "$RUNNER_TEMP/feed-key.json"
+          OUT="$RUNNER_TEMP/work"
+          # DSV41 is left to build_hip_linux.sh: 1 for rx9070 and rx7900, 0 for the others (gfx1030 and gfx1031 have no DeepSeek kernel)
+          VARIANT="$VARIANT" LLAMA="$RUNNER_TEMP/llama.cpp" HP="$HP" CORE="$CORE" LIBW="$LIBW" OUT="$OUT" \
+            PKGVER="$PKGVER" COMMIT="$COMMIT" JOBS="$(nproc)" bash packaging/build_hip_linux.sh
+          cat "$OUT/build.status"
+          PKG=$(find "$OUT/components/engine" -maxdepth 1 -type d -name '*-linux-x86_64-hip-*' | head -1)
+          [ -n "$PKG" ] || { echo "::error::no engine package folder under $OUT/components/engine"; exit 1; }
+          python3 packaging/feed_tool.py sign-package "$PKG" --key "$RUNNER_TEMP/feed-key.json"
+          python3 packaging/feed_tool.py pack-engine "$PKG" --out "$RUNNER_TEMP/release/engine" --url-prefix=
+          rm -f "$RUNNER_TEMP/feed-key.json"
+          ls -l "$RUNNER_TEMP/release/engine"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: engine-${{ matrix.variant }}
+          path: ${{ runner.temp }}/release/engine
+          if-no-files-found: error
+
+  terminal:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ needs.plan.outputs.engine_version }}
+      COMMIT: ${{ needs.plan.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Bundle the Terminal and pack it as the Control package
+        run: |
+          set -eu
+          python3 packaging/package_terminal.py --out "$RUNNER_TEMP/bundle" --target linux-x86_64 --version "$VERSION" --commit "$COMMIT"
+          ARCH=$(ls "$RUNNER_TEMP/bundle"/strata-terminal-*-linux-x86_64.tar.gz | head -1)
+          TOP=$(tar -tzf "$ARCH" | head -1 | cut -d/ -f1)
+          mkdir -p "$RUNNER_TEMP/unpacked"
+          tar -xzf "$ARCH" -C "$RUNNER_TEMP/unpacked"
+          python3 packaging/feed_tool.py pack-control "$RUNNER_TEMP/unpacked/$TOP" --out "$RUNNER_TEMP/release/control" \
+            --version "$VERSION" --platform linux-x86_64 --url-prefix=
+          ls -l "$RUNNER_TEMP/release/control"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: control
+          path: ${{ runner.temp }}/release/control
+          if-no-files-found: error
+
+  feed:
+    needs: [plan, engine-hip, terminal]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SEQUENCE: ${{ needs.plan.outputs.sequence }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: engine-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/release/engine
+      - uses: actions/download-artifact@v4
+        with:
+          name: control
+          path: ${{ runner.temp }}/release/control
+      - name: The feed key must be there to sign with
+        env:
+          FEED_KEY_JSON: ${{ secrets.FEED_KEY_JSON }}
+        run: |
+          set -eu
+          [ -n "$FEED_KEY_JSON" ] || { echo "::error::the secret FEED_KEY_JSON is empty: add the feed key under Settings -> Secrets and variables -> Actions (packaging/UPDATES.md)"; exit 1; }
+      - name: Sign and build the feed, then verify it
+        env:
+          FEED_KEY_JSON: ${{ secrets.FEED_KEY_JSON }}
+        run: |
+          set -eu
+          REL="$RUNNER_TEMP/release"
+          printf '%s' "$FEED_KEY_JSON" > "$RUNNER_TEMP/feed-key.json"
+          chmod 600 "$RUNNER_TEMP/feed-key.json"
+          python3 -c 'import json, sys; d = json.load(open("strata_control/update_keys.json")); json.dump({"keys": d["keys"]}, open(sys.argv[1], "w"), indent=1)' "$RUNNER_TEMP/feed-key.pub.json"
+          python3 packaging/feed_tool.py build-feed --out "$REL" --key "$RUNNER_TEMP/feed-key.json" --sequence "$SEQUENCE" \
+            --engine "$REL/engine" --control "$REL/control"
+          python3 packaging/feed_tool.py verify-feed "$REL" --pub "$RUNNER_TEMP/feed-key.pub.json"
+          rm -f "$RUNNER_TEMP/feed-key.json"
+          find "$REL"/engine "$REL"/control -maxdepth 1 -type f -exec mv -t "$REL" {} +   # GitHub assets are flat: the archives and their .entry.json
+          rm -rf "$REL"/engine "$REL"/control
+          cp packaging/install.sh packaging/install.ps1 "$REL"/
+          (cd "$REL" && find . -maxdepth 1 -type f ! -name 'SHA256SUMS.txt' -printf '%P\n' | sort > "$RUNNER_TEMP/files.txt" \
+            && xargs -a "$RUNNER_TEMP/files.txt" sha256sum > SHA256SUMS.txt)
+          cat "$REL/install-manifest.txt"
+          ls -l "$REL"
+      - name: The files this release publishes
+        id: list
+        run: echo "count=$(ls -1 "$RUNNER_TEMP/release" | wc -l)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-files
+          path: ${{ runner.temp }}/release
+          if-no-files-found: error
+
+  carry:
+    needs: feed
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      files: ${{ steps.list.outputs.files }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-files
+          path: ${{ runner.temp }}/new
+      - name: Is there a previous published release
+        id: prev
+        run: |
+          set -eu
+          TAG=$(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '[.[] | select(.draft | not)][0].tag_name // ""')
+          if [ -n "$TAG" ]; then
+            echo "found=$TAG" >> "$GITHUB_OUTPUT"
+            echo "previous release: $TAG"
+          else
+            echo "::error::no published release to carry from: this release cannot be complete (no latest.json, no app installer, no other platform's Terminal, no aarch64 feed); build a full release first (packaging/UPDATES.md)"
+            exit 1
+          fi
+      - name: Download its assets and drop the names this release writes
+        if: ${{ steps.prev.outputs.found }}
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/carry"
+          gh release download "$PREVIOUS" --repo "$GITHUB_REPOSITORY" -p '*' --dir "$RUNNER_TEMP/carry" || true   # a release with no assets at all
+          for f in "$RUNNER_TEMP"/new/*; do rm -f "$RUNNER_TEMP/carry/$(basename "$f")"; done
+          # the AMD engine archives and this platform's Terminal are made here, so the versions of the previous release must not ride over
+          rm -f "$RUNNER_TEMP/carry"/strata-engine-*-linux-x86_64-hip-* "$RUNNER_TEMP/carry"/strata-control-*-linux-x86_64.tar.gz*
+          ls -l "$RUNNER_TEMP/carry"
+        env:
+          PREVIOUS: ${{ steps.prev.outputs.found }}
+      - name: Is there anything to carry
+        if: ${{ steps.prev.outputs.found }}
+        id: list
+        run: |
+          set -eu
+          if [ -n "$(ls -A "$RUNNER_TEMP/carry" 2>/dev/null)" ]; then echo "files=yes" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@v4
+        if: ${{ steps.list.outputs.files }}
+        with:
+          name: carry-files
+          path: ${{ runner.temp }}/carry
+          if-no-files-found: ignore
+
+  publish:
+    needs: [plan, feed, carry]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.plan.outputs.tag }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMMIT: ${{ needs.plan.outputs.commit }}
+      DRAFT: ${{ !inputs.publish && '--draft' || '' }}
+      PRE: ${{ inputs.prerelease && '--prerelease' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-files
+          path: ${{ runner.temp }}/rel
+      - uses: actions/download-artifact@v4
+        if: ${{ needs.carry.outputs.files == 'yes' }}
+        with:
+          name: carry-files
+          path: ${{ runner.temp }}/rel
+      - name: A pre-release is not found by releases/latest/download
+        if: ${{ inputs.prerelease }}
+        run: |
+          echo "::warning::this release is a pre-release: install.sh, strata update and the app updater read releases/latest/download and get a 404 against a pre-release (packaging/UPDATES.md). Publish it as a normal release when clients must find it."
+      - name: Create the release
+        run: |
+          set -eu
+          NOTES="Linux x86_64 AMD (HIP/ROCm) engine packages, the linux-x86_64 Terminal and the signed update feed. See docs/AMD_HIP.md and packaging/UPDATES.md. The engine is compiled on a runner with no graphics card: acceptance on a real card is a manual step."
+          gh release create "$TAG" $DRAFT $PRE --repo "$GITHUB_REPOSITORY" --target "$COMMIT" --title "$TAG" \
+            --notes "$NOTES" "$REL"/*
+        env:
+          REL: ${{ runner.temp }}/rel
+      - name: What went into the release
+        run: |
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft,isPrerelease,assets \
+            --jq '"\(.tagName) draft=\(.isDraft) prerelease=\(.isPrerelease)\n" + ([.assets[].name] | join("\n"))'
+
+  docker:
+    needs: [plan, publish]
+    if: ${{ inputs.publish && inputs.docker }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: read
+      packages: write
+    env:
+      REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REGISTRY_USER: ${{ github.actor }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Free disk space (the runner has about 14 GB; a package plus its image needs about 10 GB)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          docker system prune -af >/dev/null 2>&1 || true
+          df -h /
+      - name: Log in to ghcr.io
+        run: printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+      - name: Build and push the hip images of this release
+        env:
+          TAG: ${{ needs.plan.outputs.tag }}
+          FLAVORS: ${{ needs.plan.outputs.flavors }}
+          NO_LATEST: ${{ inputs.prerelease && '--no-latest' || '' }}
+        run: |
+          set -eu
+          [ -n "$FLAVORS" ] || { echo "the built variants have no container flavor: nothing to build"; exit 0; }
+          docker/publish.sh --release-tag "$TAG" --flavors "$FLAVORS" --image ghcr.io/okkiv/strata --push $NO_LATEST

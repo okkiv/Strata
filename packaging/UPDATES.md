@@ -133,9 +133,11 @@ A key rotation is a release that carries both public keys; the old private key s
 
 ## Releasing
 
-Keys live only on the release PC (`feed-key.json`, `tauri-updater.key`; the Tauri key has no password). Every build box builds WITHOUT a key:
+Keys live on the release PC (`feed-key.json`, `tauri-updater.key`; the Tauri key has no password), and the feed key also lives in the `FEED_KEY_JSON` repository
+secret that `.github/workflows/release.yml` signs with. Keys never live in this tree. Every build box builds WITHOUT a key:
 the default `tauri.conf.json` has `createUpdaterArtifacts: false`, so `tauri build` needs no signing key and makes the same installer bytes.
-All signing happens on the release PC, on the finished files.
+All signing happens on the release PC, on the finished files, or in `.github/workflows/release.yml`, which writes the secret to a file outside the checkout,
+where `feed_tool.py` accepts it, and publishes the release.
 
 **What is built (per OS)**
 
@@ -197,10 +199,19 @@ The feed is hosted as the files of a GitHub release of `okkiv/Strata`. The built
 and `install.ps1` use the folder). GitHub assets are flat, so build the packages with `--url-prefix ""` and upload every file of the release folder
 as an asset: `strata-feed.json`, `strata-feed.json.sig`, `install-manifest.txt`, `install.sh`, `install.ps1`, the engine and Control archives and the
 app installer with `latest.json` (the Tauri updater endpoint). `STRATA_FEED` (installers) and `--feed` / `STRATA_UPDATE_FEED` (`strata update`) override the
-address. Nothing in this tree uploads anything.
+address. Nothing in this tree uploads anything: a checkout never uploads. `.github/workflows/release.yml` uploads and signs, and only when a maintainer starts it by
+hand; a run publishes nothing until it is started with `publish` on, and a run without it leaves a draft.
 
 Publish as a normal release (latest): a pre-release is not found by `latest/download`, so the installers, `strata update` and the app updater would get a 404. The `latest` release must carry every file listed above, so a later hotfix release repeats them all. The app updater reads
 `https://github.com/okkiv/Strata/releases/latest/download/latest.json`.
+
+**`.github/workflows/release.yml` builds Linux AMD only.** It builds the HIP engine packages of the variants it is asked for (`rx9070`, `rx7900` by default), the Terminal
+for `linux-x86_64`, the signed feed, `SHA256SUMS.txt` and the `hip` Docker images. Everything else a release needs — the app installers, `latest.json`, the engines and
+Terminals of the other platforms, `strata-feed-linux-aarch64.json` — is carried over from the previous release by its `carry` job, so those bytes and that sequence do not
+change. `plan` and `carry` read the newest **published** release (a pre-release counts, a draft does not), so two published feeds never share a sequence, and a run that
+finds no published release to carry from stops rather than publish an incomplete `latest`. It writes no `latest.json` of its own. It makes a pre-release only when it is told to, and a pre-release is invisible to `latest/download`: `install.sh`,
+`strata update` and the app updater get a 404 against it. A HIP build in CI happens on a runner with no graphics card, so it is a compile test: acceptance on a real
+card stays a manual step (docs/AMD_HIP.md).
 
 ## Testing locally
 
